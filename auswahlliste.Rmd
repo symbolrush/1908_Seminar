@@ -1,0 +1,70 @@
+---
+title: "Seminar 1908 - Themenauswahl - WS 17/18"
+author: "Adrian Stämpfli, Matr.Nr. 9529020"
+date: "30 August 2017"
+header-includes: \usepackage[ngerman]{babel} \usepackage{graphicx} \usepackage{float}
+  \setlength\headheight{22pt} 
+output:
+  pdf_document:
+    fig_caption: yes
+    highlight: tango
+    number_sections: yes
+    toc: no
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+# T52-1: Modellierung von Simulationsprojekten
+
+In meiner Tätigkeit für das Institut für Modellbildung und Simulation der Fachhochschule St.Gallen (IMS-FHS) modelliere und simuliere ich die verschiedensten Sachverhalte vom Rettungswesen [^1] bis zu Fragen der Alterspolitik [^2]. Je nach Projekt kommen dabei verschiedene Simulationsparadigmen zum Einsatz (System Dynamics, Discrete Event Simulation, Time Based Simulation) und die Deliverables variieren (Klassische Gutachten in Berichtform, Interaktive Berichte, Prototypische Software). Trotz der inhaltlichen Breite haben alle unsere Projekte denselben Startpunkt (Gespräche mit relevanten Stakeholdern) und dieselben Lieferobjekte (Modell und Simulation).  
+Der Prozess dazwischen variiert: Während im Bereich System Dynamics mit dem Group Model Building Ansatz [^3] eine Methode zur Verfügung steht, ist im Bereich der Diskreten Ereignis Simulation (DES) dieser Prozess schlechter unterstützt[^4]. Auch die traditionellen Methoden aus dem Operations Research greifen zu kurz (ungenügende Modellverständlichkeit bei Stakeholder, ungenügende Informatikunterstützung), wir erweitern sie daher Ad-Hoc und intuitiv. Aufgrund meines Informatikhintergrunds flechte ich öfter Methoden aus der Softwareentwicklung (UML, Scrum) ein, welche jedoch ebenfalls Schwächen haben [^4] [^5], und relevante Aspekte zu häufig ungenau darstellen oder Augenmerk auf für unsere Technologien uninteressante Aspekte legen.   
+Ziel dieses Seminarbeitrags ist es erstens eine Einführung in relevante Methoden zur (Software)-System-Modellierung aus der Softwareentwicklung (Prototyping, Scrum, UML) und System Dynamics (Group Model Building) zu geben und zweitens das Zusammenspiel der Methoden (und damit deren Vor- und Nachteile sowie Grenzen) an einem Beispiel aus der Praxis des IMS-FHS darzustellen. In einem weiteren Schritt (nicht mehr Teil des Seminars, sondern möglicherweise eine Masterarbeit) kann daraus ein Framework zur Modellierung von Simulationsprojekten entwickelt werden. Das Framework muss dabei Instrumente zur Verfügung stellen, welche    
+1. es den Stakeholder erlauben die Modelle nachzuvollziehen (und damit auch Vertrauen in die Modelle und Simulationsresultate zu gewinnen),  
+2. paradigmenübergreifend funktionieren,    
+3. genügend genau sind, so dass sie für die Informatikumsetzung als Vorlage dienen können und  
+4. die Eigenheiten (und insbesondere die Stärken) von R[^6] (und anderen Hochsprachen) berücksichtigen.
+
+**Literatur:**  
+- Furian et al. (2015) - A conceptual modeling framework for discrete event simulation using hierarchical control structures - http://www.sciencedirect.com/science/article/pii/S1569190X15000647  
+- Kecher, Salvanos (2015) - UML 2.5: Das umfassende Handbuch  
+- Vennix (1995) - Group Model Building : Facilitating Team Learning Using System Dynamics  
+- http://www.scrumguides.org/scrum-guide.html  
+
+
+[^1]: beispielsweise: https://www.fhsg.ch/fhs.nsf/files/IMS_Rettungswesen_sim911Bericht/$FILE/1%20-%20sim911%20-%20Ein%20Simulator%20fu%CC%88r%20das%20Rettungswesen.pdf
+[^2]: beispielsweise: https://www.youtube.com/watch?v=VWAM1kLYsZM
+[^3]: Group Model Building - Jac Vennix, http://eu.wiley.com/WileyCDA/WileyTitle/productCd-0471953555.html
+[^4]: http://www.sciencedirect.com/science/article/pii/S1569190X15000647
+[^5]: https://lispy.wordpress.com/2008/10/29/why-uml-fails-to-add-value-to-the-design-and-development-process/
+
+\newpage
+
+# T52-2: testthat
+
+Zur Entwicklung unserer Simulationsprojekte verwenden wir zu einem grossen Teil die Programmiersprache R [^6] zusammen mit der IDE RStudio [^7]. Für das Testen von Code existieren in R verschiedene Ansätze. Da R eine interaktive Konsole zur Verfügung stellt ist häufig das interaktive Testen mit adhoc Datensätzen während dem Entwickeln die erste Methode (Hadley 2011). Sobald der Code eine gewisse Reife hat und Teil eines `packages` ist stehen auch formale Methoden zur Verfügung.  
+- `RUnit` (König et al. 2006) ist ein an der XUnit Familie orientiertes Framework für Unit-tests. Es erfordert viel Einrichtungs- und Wartungsaufwand (Hadley 2011) und hat sich in der R-Community nicht breit durchgesetzt.  
+- `testthat` (Hadley 2011) ist ein neueres Framework, welches sich ebenfalls auf XUnit bezieht, aber auch Ideen aus den vielen innovativen Ruby testing libraries beizieht (Hadley 2011). `testthat` ist einfacher einzusetzen als `RUnit` und hat sich in den letzten Jahren als wichtigstes Framework etabliert[^9].  
+- `testit` (Yihui Xie 2013) ist ein sehr schlankes Framework. Yihui Xie argumentiert, dass auch `testthat` zu formal ist und zuviel Einrichtungs- und Wartungsaufwand benötigt (Yihui Xie 2013).  
+
+Inhalt dieses Seminarbeitrages ist es  
+1. eine Einführung in R zu geben,  
+2. die verschiedenen Testing-Frameworks darzustellen (mit ihren Vor- und Nachteilen) und  
+3. Schlussfolgerungen zu ziehen, welches Framework für die Arbeit an einem typischen Simulationsprojekt des IMS-FHS am gewinnbringendsten ist.
+
+**Literatur**  
+- Hadley (2011), testthat: Get Started with Testing, https://journal.r-project.org/archive/2011/RJ-2011-002/RJ-2011-002.pdf    
+- König et al. (2006), RUnit - A Unit Test Framework for R, https://cran.rstudio.com/web/packages/RUnit/vignettes/RUnit.pdf   
+- Yihui Xie (2013), Testing R Packages, https://yihui.name/en/2013/09/testing-r-packages/
+
+[^6]: https://www.r-project.org/
+[^7]: https://www.rstudio.com/
+[^9]: `testthat` wurde mehr als 5x so häufig installiert wie `RUnit` in den letzten 5 Jahren.
+
+# T47: Microservices - eine Einführung  
+*Priorität 3*
+
+# T45: Versionsverwaltung mit Git  
+*Priorität 4*
+
