@@ -1,0 +1,27 @@
+---
+title: "Literatur"
+author: "Adrian Stämpfli"
+date: "9 Oktober 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+### testing in general  
+http://www.mdlerch.com/writing-tests-for-r-packages-without-testthat-and-runit.html
+http://th3james.github.io/blog/2013/09/25/testing-code-is-simple/
+https://kbroman.wordpress.com/2015/12/07/write-unit-tests/
+
+### testit  
+https://cran.r-project.org/web/packages/testit/testit.pdf
+https://yihui.name/en/2013/09/testing-r-packages/
+
+### testthat  
+https://tgmstat.wordpress.com/2013/06/26/devtools-and-testthat-r-packages/
+
+### covr
+https://www.rstudio.com/resources/webinars/covr-bringing-test-coverage-to-r/

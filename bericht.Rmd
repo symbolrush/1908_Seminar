@@ -1,0 +1,43 @@
+---
+title: "sim911 - ein Simulator für das Rettungswesen"
+author:
+- Adrian Stämpfli, Christoph Strauss
+- Institut für Modellbildung und Simulation, Fachhochschule St.Gallen
+header-includes: \usepackage[ngerman]{babel} \usepackage{graphicx} \usepackage{float}
+  \usepackage{fancyhdr} \pagestyle{fancy} \setlength\headheight{22pt} \fancyhead[L]{\includegraphics[width=3cm]{logo.png}}
+output:
+  pdf_document:
+    fig_caption: yes
+    highlight: tango
+    number_sections: yes
+    toc: yes
+  html_document:
+    theme: united
+    toc: yes
+bibliography: bibliography.bib
+preamble: |
+  % Any extra latex you need in the preamble
+abstract: |
+  Die Schweizer Sanitätsnotrufzentralen bearbeiten jährlich mehr als 580‘000 medizinische Notrufe, aus welchen ca. 450’000 Einsätze für die Rettungsdienste entstehen. Die effiziente Disposition und Bearbeitung dieser Einsätze ist eine grosse Herausforderung. `sim911` simuliert die Hilfsfristerreichung und erlaubt es verschiedene Massnahmen wie Stützpunktverschiebungen, temporäre Stützpunkte oder Veränderungen der Dienstpläne zu bewerten. Hierzu nutzt `sim911` historische Einsatzdaten, eine Dispositionsstrategie sowie Stützpunkte und Dienstpläne als Eingaben und berechnet daraus verschiedene für das Rettungswesen relevante Kennzahlen und grafische Auswertungen. `sim911` wurde im Rahmen eines KTI geförderten Projektes (KTI 15782.1 PFES-ES) entwickelt und bereits in mehreren Praxisprojekten erfolgreich angewandt. `sim911` wird durch das Institut für Modellbildung und Simulation aktiv weiterentwickelt.
+---
+
+```{r global_options, include=FALSE}
+knitr::opts_chunk$set(fig.pos = 'H')
+```
+
+\newpage
+
+# Einführung in R 
+Was ist R. [@Peng2014]
+
+# Testing in R  
+## 
+
+## Testing Approaches  
+
+## Testing Frameworks
+
+# Testthat (und Devtools)  
+[@Wickham2015]
+
+# Literatur
