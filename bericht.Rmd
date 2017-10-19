@@ -1,6 +1,12 @@
 ---
-title: "Seminar Programmiersysteme - T52: testthat"
-author: "Adrian Stämpfli, Matr.Nr. 9529020"
+title: | 
+    | Seminar Programmiersysteme
+    | T52: testthat - Testing in R
+author: |
+    | 
+    | Adrian Stämpfli
+    | Matr.Nr. 9529020
+    | 
 header-includes: \usepackage[ngerman]{babel} \usepackage{graphicx} \usepackage{float} \pagenumbering{roman} 
 output:
   pdf_document:
@@ -8,7 +14,9 @@ output:
     highlight: tango
     number_sections: yes
     toc: yes
-date: "`r format(Sys.time(), '%B %d, %Y')`"
+date: | 
+    |  
+    | `r format(Sys.time(), '%B %d, %Y')`
 documentclass: report
 geometry: margin=1in
 fontfamily: mathpazo
@@ -42,6 +50,20 @@ Was ist R. [siehe @Peng2014, Abschnitt 2]
 ### testit
 
 ### testthat
+
+```{r}
+library(testthat)
+
+add <- function(x, y) {
+  return(x + y)
+}
+
+test_that("add works", {
+  expect_equal(add(2, 2), 4)
+  expect_error(add("2", 2))
+})
+```
+
 
 ### RUnit und svUnit
 
