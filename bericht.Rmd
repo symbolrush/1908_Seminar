@@ -25,7 +25,7 @@ bibliography: bibliography.bib
 preamble: |
   % Any extra latex you need in the preamble
 abstract: |
-  Test Your Software, or Your Users Will
+  Dieser Seminarbeitrag stellt das `testthat` Package für automatisierte Testen von R packages vor. Einleitend wird eine kurze Einführung in R gegeben, sowie einige grundlegende Gedanken zum Testing allgemein, sowie zum Testing im Scientific Computing vorgestellt. Abgeschlossen wird der Beitrag von einen Gedanken zur Erweiterung von `testthat`, um weitere Konzepte des Testings in R integrieren zu können.
 ---
 
 ```{r global_options, include=FALSE}
@@ -36,11 +36,18 @@ knitr::opts_chunk$set(fig.pos = 'H')
 \pagenumbering{arabic} 
 
 # Einführung in R  
+2 Seiten
+
 ## Was ist R?  
 R ist eine Programmiersprache.[^11]  
 [siehe @Peng2014, Abschnitt 3.1 - 3.8]  
 
 ..und [@Wickham2017, Abschnitt 1.3.2 und 1.4 - 1.6]
+
+### Getting help and learning more  
+[@Wickham2017, Abschnitt 1.6]
+
+
 
 ### RStudio  
 [@Wickham2017, Abschnitt 1.4.2]
@@ -52,26 +59,26 @@ Nützlich für Scientific Computing und Data Sciences. [@Peng2014, Introduction]
 
 \newpage
 
-# Testing in R  
+# Testing in R mit `testthat`  
 
 ## Warum Testing?  
+1 Seiten
+
 [@Wilson2014, Abschnitt "Plan for Mistake" und Einführung]
-[@Hunt2000]
+[@Hunt2000, 189ff., 237ff.]
 
 ## Testing Approaches  
+4 Seiten
 
-[@Hunt2000], [@Wilson2014]
+[@Hunt2000], [@Wilson2014], [@Wickham2011]
 
 ### Testing in der Konsole  
 R ist eine Skriptsprache. Das heisst jede Zeile Code kann zu jedem Zeitpunkt ohne Compilieren ausgeführt werden. R Programmierer nutzen diese Eigenschaft typischerweise sehr intensiv: Bei der Entwicklung einer Funktion werden die einzelnen Bestandteile direkt in der Konsole getestet, korrigiert und danach im Skript platziert. Das heisst das Testing in der Konsole ist typischerweise die erste Variante, wie R Code getestet wird. [@Wickham2011] schreibt hierzu: "es ist nicht so, dass wir unseren Code nicht testen, aber wir speichern die Tests nicht..." (ganzer Abschnitt evtl.)
 
+### ...
 
+# `testthat`
 
-## Testing Frameworks
-
-### testit
-
-### testthat
 [@Wickham2015], [@Wickham2011]
 
 
@@ -89,10 +96,9 @@ test_that("add works", {
 ```
 
 
-### RUnit und svUnit
+## Konkurrenzprodukte
+RUnit und svUnit
 
-# Testthat  
-[@Wickham2015], [@Wickham2011]
 
 \newpage
 
