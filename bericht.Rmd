@@ -35,21 +35,38 @@ knitr::opts_chunk$set(fig.pos = 'H')
 \newpage
 \pagenumbering{arabic} 
 
-# Einführung in R 
-Was ist R. [siehe @Peng2014, Abschnitt 2]
+# Einführung in R  
+## Was ist R?  
+[siehe @Peng2014, Abschnitt 2]  
+..und [@Wickham2017, Abschnitt 1.3.2 und 1.4 - 1.6]
+
+## Warum R?  
+Nützlich für Scientific Computing und Data Sciences. [@Peng2014, Introduction]
 
 \newpage
 
 # Testing in R  
-## 
+
+## Warum Testing?  
+[@Wilson2014, Abschnitt "Plan for Mistake" und Einführung]
+[@Hunt2000]
 
 ## Testing Approaches  
+
+[@Hunt2000], [@Wilson2014]
+
+### Testing in der Konsole  
+R ist eine Skriptsprache. Das heisst jede Zeile Code kann zu jedem Zeitpunkt ohne Compilieren ausgeführt werden. R Programmierer nutzen diese Eigenschaft typischerweise sehr intensiv: Bei der Entwicklung einer Funktion werden die einzelnen Bestandteile direkt in der Konsole getestet, korrigiert und danach im Skript platziert. Das heisst das Testing in der Konsole ist typischerweise die erste Variante, wie R Code getestet wird. [@Wickham2011] schreibt hierzu: "es ist nicht so, dass wir unseren Code nicht testen, aber wir speichern die Tests nicht..." (ganzer Abschnitt evtl.)
+
+
 
 ## Testing Frameworks
 
 ### testit
 
 ### testthat
+[@Wickham2015], [@Wickham2011]
+
 
 ```{r}
 library(testthat)
@@ -67,21 +84,26 @@ test_that("add works", {
 
 ### RUnit und svUnit
 
-# Testthat (und Devtools)  
-[@Wickham2015]
+# Testthat  
+[@Wickham2015], [@Wickham2011]
 
 \newpage
 
-# Konklusionen für die Arbeit am IMS
+# Nützliche Erweiterungen  
+`testthat` kann sinnvoll erweitert werden.  
+
+## `devtools`  
 
 
-Struktur Der Vortrag sollte klar strukturiert sein. Bei wissenschaftlichen Arbeiten bietet sich meist folgende Grobgliederung an:
-1. Überblick über den Vortrag
-2. Kurze Einführung in das Themengebiet
-3. Klares Herausarbeiten der Problemstellung oder der wesentlichen Ideen des zu behan- delnden Themas
-4. Entwicklung der Lösung zu diesem Problem oder Darstellung der wesentlichen Ideen
-5. Zusammenfassung des Vorgetragenen und Bewertung der Ergebnisse
-6. Quellenangaben
+## `assertthat`  
+
+## `covr`  
+[@Hester2017]
+
+
+\newpage
+
+# Zusammenfassung des Vorgetragenen und Bewertung der Ergebnisse
 
 \newpage
 
