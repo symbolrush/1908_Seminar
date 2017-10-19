@@ -25,7 +25,7 @@ bibliography: bibliography.bib
 preamble: |
   % Any extra latex you need in the preamble
 abstract: |
-  Die Schweizer Sanitätsnotrufzentralen bearbeiten jährlich mehr als 580‘000 medizinische Notrufe, aus welchen ca. 450’000 Einsätze für die Rettungsdienste entstehen. Die effiziente Disposition und Bearbeitung dieser Einsätze ist eine grosse Herausforderung. `sim911` simuliert die Hilfsfristerreichung und erlaubt es verschiedene Massnahmen wie Stützpunktverschiebungen, temporäre Stützpunkte oder Veränderungen der Dienstpläne zu bewerten. Hierzu nutzt `sim911` historische Einsatzdaten, eine Dispositionsstrategie sowie Stützpunkte und Dienstpläne als Eingaben und berechnet daraus verschiedene für das Rettungswesen relevante Kennzahlen und grafische Auswertungen. `sim911` wurde im Rahmen eines KTI geförderten Projektes (KTI 15782.1 PFES-ES) entwickelt und bereits in mehreren Praxisprojekten erfolgreich angewandt. `sim911` wird durch das Institut für Modellbildung und Simulation aktiv weiterentwickelt.
+  Test Your Software, or Your Users Will
 ---
 
 ```{r global_options, include=FALSE}
@@ -37,11 +37,18 @@ knitr::opts_chunk$set(fig.pos = 'H')
 
 # Einführung in R  
 ## Was ist R?  
-[siehe @Peng2014, Abschnitt 2]  
+R ist eine Programmiersprache.[^11]  
+[siehe @Peng2014, Abschnitt 3.1 - 3.8]  
+
 ..und [@Wickham2017, Abschnitt 1.3.2 und 1.4 - 1.6]
+
+### RStudio  
+[@Wickham2017, Abschnitt 1.4.2]
 
 ## Warum R?  
 Nützlich für Scientific Computing und Data Sciences. [@Peng2014, Introduction]
+
+[^11: https://www.r-project.org/]
 
 \newpage
 
