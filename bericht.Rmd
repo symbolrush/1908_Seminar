@@ -1,19 +1,18 @@
 ---
-title: "sim911 - ein Simulator für das Rettungswesen"
-author:
-- Adrian Stämpfli, Christoph Strauss
-- Institut für Modellbildung und Simulation, Fachhochschule St.Gallen
-header-includes: \usepackage[ngerman]{babel} \usepackage{graphicx} \usepackage{float}
-  \usepackage{fancyhdr} \pagestyle{fancy} \setlength\headheight{22pt} \fancyhead[L]{\includegraphics[width=3cm]{logo.png}}
+title: "Seminar Programmiersysteme - T52: testthat"
+author: "Adrian Stämpfli, Matr.Nr. 9529020"
+header-includes: \usepackage[ngerman]{babel} \usepackage{graphicx} \usepackage{float} \pagenumbering{roman} 
 output:
   pdf_document:
     fig_caption: yes
     highlight: tango
     number_sections: yes
     toc: yes
-  html_document:
-    theme: united
-    toc: yes
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+documentclass: report
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
 bibliography: bibliography.bib
 preamble: |
   % Any extra latex you need in the preamble
@@ -26,9 +25,12 @@ knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
 \newpage
+\pagenumbering{arabic} 
 
 # Einführung in R 
-Was ist R. [@Peng2014]
+Was ist R. [siehe @Peng2014, Abschnitt 2]
+
+\newpage
 
 # Testing in R  
 ## 
@@ -37,7 +39,35 @@ Was ist R. [@Peng2014]
 
 ## Testing Frameworks
 
+### testit
+
+### testthat
+
+### RUnit und svUnit
+
 # Testthat (und Devtools)  
 [@Wickham2015]
 
+\newpage
+
+# Konklusionen für die Arbeit am IMS
+
+
+Struktur Der Vortrag sollte klar strukturiert sein. Bei wissenschaftlichen Arbeiten bietet sich meist folgende Grobgliederung an:
+1. Überblick über den Vortrag
+2. Kurze Einführung in das Themengebiet
+3. Klares Herausarbeiten der Problemstellung oder der wesentlichen Ideen des zu behan- delnden Themas
+4. Entwicklung der Lösung zu diesem Problem oder Darstellung der wesentlichen Ideen
+5. Zusammenfassung des Vorgetragenen und Bewertung der Ergebnisse
+6. Quellenangaben
+
+\newpage
+
+\listoffigures
+
 # Literatur
+
+
+
+
+
