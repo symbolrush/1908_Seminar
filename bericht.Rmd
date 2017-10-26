@@ -62,7 +62,26 @@ Nützlich für Scientific Computing und Data Sciences. [@Peng2014, Introduction]
 # Testing in R mit `testthat`  
 
 ## Warum Testing?  
-1 Seiten
+Testing ist essenziell, denn jede Software wird getestet. [@Hunt2000] schreiben dazu in Ihrem Buch "The Pragmatic Programmer": "Test Your Software, or Your Users Will". Also lieber selber die Bugs finden, als von seinen Kunden (oder Kollegen) darauf hingewiesen werden.  
+Dennoch testen viele Programmierer nicht gerne. Testen wird als notwendiges Übel betrachtet, als Zusatzaufwand den es zu minimieren gilt. Häufig wird daher "nett" getestet: Kritische Stellen werden eher umschifft und nicht auf Herz und Nieren geprüft. [@Hunt2000, 237ff.]  
+Im Scientific Computing ist die Situation dabei eher noch schlechter als in der traditionellen Softwareentwicklung. Dies hat mehrere Gründe. [@Wilson2014] schreiben, dass Wissenschaftler zwar mehr und mehr Zeit mit der Entwicklung von Software verbringen, jedoch meistens kaum fundierte Kenntnisse in Softwareentwicklung haben. Dabei ist Software für die heutige Wissenschaft so wichtig wie Reagenzgläser und Teleskope. In der Folge wird von denselben Wissenschaftler, welche teure Messgeräte einsetzen und diese regelmässig kalibrieren schlecht getesteter Code für die Auswertung der Messdten benutzt. Die Folge sind nicht selten falsche Ergebnisse. [@Wilson2014] geben eine ganze Reihe von Artikeln aus bekannten wissenschaftlichen Journals an, welche sich mit der Richtigstellung von falschen Untersuchungen aufgrund von Programmierfehlern beschäftigen. Testing ist also wichtig, wenn die Software welche getestet wird nicht von zahlenden Kunden genutzt wird.  
+[@Hunt2000]
+Tools, welche das (automatisierte) Testen unterstützen gibt es viele. Alleine in R gibt es mit `svUnit` und `rUnit` zwei Implementierungen des XUnit Frameworks.  
+Warum also braucht es mit `testthat` nochmals ein neues Framework. [@Hunt2000] argumentieren in Ihrem Buch, dass Testing mehr ein kulturelles als ein technisches Problem sei. Die Kultur des Testens könne in ein Projekt eingebunden werden unabhängig von der Programmiersprache. [@Hunt2000, S.197]  
+Genau hier setzt `testthat` an. Der Entwickler von Testthat Hadley Wickham, Chief Scientist bei RStudio und Autor mehrerer Bücher und der wichtigsten R packages der letzten Jahre [^21], schreibt hierzu, dass Software Testing wichtig sei, aber, dass es viele nicht tun, weil es frustrierend und langweilig ist. [@Wickham2011]  `testthat` versucht dies zu ändern, indem es sich besonders einfach in den Workflow von R Programmierern einbinden lässt, einfach zu lernen ist und gut skaliert. Insbesondere der schnell mögliche Einstieg in `testthat` versucht genau die "Kultur des Testens" zu katalysieren.  
+Er argumentiert, dass automatisiertes Testen zwar etwas Zusatzaufwand bedeutet, sich jedoch in viererlei Hinsichten ausbezahlt:  
+1. **Weniger Frustration**. Die Arbeit an der aktuell zu entwickelnden Software aufzugeben, um Bugs in (alter) Software zu suchen ist frustrierend. Gut getestete Software hat weniger Bugs, weniger Zeit geht mit der mühsamen Suche nach (alten) Bugs verloren.  
+2. **Bessere Code Struktur**. Gut geschriebener Code ist einfacher zu testen. Häufig führt eine Kultur des Testens auch dazu, dass der Code umgeschrieben wird, bis er besser testbar ist. Dasselbe Argument führen auch [@Hunt2000] ins Feld.  
+3. **Besserer Wiedereinstieg in die Arbeit nach einer (längeren) Pause**. Wenn eine Codeing-Sitzung damit abgeschlossen wird einen Test für das nächste zu entwickelnde Feature zu schreiben ist bei der Wiederaufnahme der Arbeit sofort klar, welcher Test einen Fehler wirft und welche Methode demzufolge als nächstes entwickelt werden sollte.  
+4. **Mehr Vertrauen bei Änderungen am Code**. Wenn ein Entwickler weiss, dass jede Funktion gut getestet ist, lassen sich Änderungen mit viel besserem Gefühl umsetzen.  
+
+Meine Erfahrung bei der Entwicklung von `sim911`, einer Sammlung von R packages für die Analyse und Simulation von Rettungsdiensteinsatzdaten, welche ich 2014 begonnen habe und in der Zwischenzeit von einem 4-köpfigen Team am IMS-FHS weiterentwickelt wird hat mich zusätzlich noch einen weiteren Punkt gelernt:  
+5. **Insgesamt mehr Vertrauen in den (eigenen) Code**. Einige Teile von `sim911`[^22] sind viel besser getestet als andere. Das Vertrauen in diese Teile ist viel höher, als in die anderen. Wenn ich einem Kollegen helfe einen Bug in einem Projekt zu finden ist dieses Vertrauen essentiell. Bei den schlecht getesteten Teilen bin ich mir einige Jahre nach dem Entwickeln selber nicht mehr sicher, ob sie jetzt mit anderen Situationen umgehen können oder nicht. Dies führt dazu, dass immer mal wieder Zeit damit verloren geht, das Vertrauen in (alten) Code zurückzugewinnen. Häufig ist der Bug dann doch nicht im schlecht getesteten Code. Wäre der Code gut getestet, wäre dies jedoch von Beginn weg klar.     
+
+
+
+[^21: https://www.tidyverse.org/]
+[^22: https://www.fhsg.ch/fhs.nsf/files/IMS_Rettungswesen_sim911Bericht/$FILE/1%20-%20sim911%20-%20Ein%20Simulator%20fu%CC%88r%20das%20Rettungswesen.pdf]
 
 [@Wilson2014, Abschnitt "Plan for Mistake" und Einführung]
 [@Hunt2000, 189ff., 237ff.]
@@ -73,7 +92,7 @@ Nützlich für Scientific Computing und Data Sciences. [@Peng2014, Introduction]
 [@Hunt2000], [@Wilson2014], [@Wickham2011]
 
 ### Testing in der Konsole  
-R ist eine Skriptsprache. Das heisst jede Zeile Code kann zu jedem Zeitpunkt ohne Compilieren ausgeführt werden. R Programmierer nutzen diese Eigenschaft typischerweise sehr intensiv: Bei der Entwicklung einer Funktion werden die einzelnen Bestandteile direkt in der Konsole getestet, korrigiert und danach im Skript platziert. Das heisst das Testing in der Konsole ist typischerweise die erste Variante, wie R Code getestet wird. [@Wickham2011] schreibt hierzu: "es ist nicht so, dass wir unseren Code nicht testen, aber wir speichern die Tests nicht..." (ganzer Abschnitt evtl.)
+R ist eine Skriptsprache. Das heisst jede Zeile Code kann zu jedem Zeitpunkt ohne Compilieren ausgeführt werden. R Programmierer nutzen diese Eigenschaft typischerweise sehr intensiv: Bei der Entwicklung einer Funktion werden die einzelnen Bestandteile direkt in der Konsole getestet, korrigiert und danach im Skript platziert. Das heisst das Testing in der Konsole ist typischerweise die erste Variante, wie R Code getestet wird. [@Wickham2011] schreibt hierzu: "es ist nicht so, dass wir unseren Code nicht testen, aber wir speichern die Tests nicht, so dass wir sie automatisert wieder laufen lassen können."
 
 ### ...
 
