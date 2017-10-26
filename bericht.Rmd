@@ -78,7 +78,7 @@ Er argumentiert, dass automatisiertes Testen zwar etwas Zusatzaufwand bedeutet, 
 Meine Erfahrung bei der Entwicklung von `sim911`, einer Sammlung von R packages für die Analyse und Simulation von Rettungsdiensteinsatzdaten, welche ich 2014 begonnen habe und in der Zwischenzeit von einem 4-köpfigen Team am IMS-FHS weiterentwickelt wird hat mich zusätzlich noch einen weiteren Punkt gelernt:  
 5. **Insgesamt mehr Vertrauen in den (eigenen) Code**. Einige Teile von `sim911`[^22] sind viel besser getestet als andere. Das Vertrauen in diese Teile ist viel höher, als in die anderen. Wenn ich einem Kollegen helfe einen Bug in einem Projekt zu finden ist dieses Vertrauen essentiell. Bei den schlecht getesteten Teilen bin ich mir einige Jahre nach dem Entwickeln selber nicht mehr sicher, ob sie jetzt mit anderen Situationen umgehen können oder nicht. Dies führt dazu, dass immer mal wieder Zeit damit verloren geht, das Vertrauen in (alten) Code zurückzugewinnen. Häufig ist der Bug dann doch nicht im schlecht getesteten Code. Wäre der Code gut getestet, wäre dies jedoch von Beginn weg klar.     
 
-
+[@Wickham2015] noch einarbeiten..
 
 [^21: https://www.tidyverse.org/]
 [^22: https://www.fhsg.ch/fhs.nsf/files/IMS_Rettungswesen_sim911Bericht/$FILE/1%20-%20sim911%20-%20Ein%20Simulator%20fu%CC%88r%20das%20Rettungswesen.pdf]
@@ -86,15 +86,23 @@ Meine Erfahrung bei der Entwicklung von `sim911`, einer Sammlung von R packages 
 [@Wilson2014, Abschnitt "Plan for Mistake" und Einführung]
 [@Hunt2000, 189ff., 237ff.]
 
-## Testing Approaches  
-4 Seiten
+## Testing Approaches in R  
 
-[@Hunt2000], [@Wilson2014], [@Wickham2011]
+https://yihui.name/en/2013/09/testing-r-packages/
+
+[@Wickham2011]
 
 ### Testing in der Konsole  
 R ist eine Skriptsprache. Das heisst jede Zeile Code kann zu jedem Zeitpunkt ohne Compilieren ausgeführt werden. R Programmierer nutzen diese Eigenschaft typischerweise sehr intensiv: Bei der Entwicklung einer Funktion werden die einzelnen Bestandteile direkt in der Konsole getestet, korrigiert und danach im Skript platziert. Das heisst das Testing in der Konsole ist typischerweise die erste Variante, wie R Code getestet wird. [@Wickham2011] schreibt hierzu: "es ist nicht so, dass wir unseren Code nicht testen, aber wir speichern die Tests nicht, so dass wir sie automatisert wieder laufen lassen können."
 
-### ...
+https://yihui.name/en/2013/09/testing-r-packages/  
+### Textvergleichs-Approach  
+tests are put under package/tests/, and a foo-test.Rout.save from R CMD BATCH foo-test.R; testing is done by comparing foo-test.Rout from R CMD check with your foo-test.Rout.save; R notifies you when it sees text differences; this is typically used by R core and followers  
+
+### RUnit and its followers:  
+formal ideas were borrowed from other languages and frameworks and it looks there is a lot to learn before you can get started  
+### the testthat family:  
+tests are expressed as expect_something() like a natural human language
 
 # `testthat`
 
@@ -115,6 +123,8 @@ test_that("add works", {
 ```
 
 
+
+
 ## Konkurrenzprodukte
 RUnit und svUnit
 
@@ -128,6 +138,7 @@ RUnit und svUnit
 
 
 ## `assertthat`  
+[@Wilson2014, Plan for mistake], 
 
 ## `covr`  
 [@Hester2017]
