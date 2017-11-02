@@ -59,7 +59,7 @@ Nützlich für Scientific Computing und Data Sciences. [@Peng2014, Introduction]
 
 \newpage
 
-# Testing in R mit `testthat`  
+# Testing in R  
 
 ## Warum Testing?  
 Testing ist essenziell, denn jede Software wird getestet. [@Hunt2000] schreiben dazu in Ihrem Buch "The Pragmatic Programmer": "Test Your Software, or Your Users Will". Also lieber selber die Bugs finden, als von seinen Kunden (oder Kollegen) darauf hingewiesen werden.  
@@ -87,26 +87,67 @@ Meine Erfahrung bei der Entwicklung von `sim911`, einer Sammlung von R packages 
 [@Hunt2000, 189ff., 237ff.]
 
 ## Testing Approaches in R  
+In R existieren viele Testing Approaches. [@YihuiXie], Autor von `knitr` und weiteren R packages im Bereich "Publishing", nennt in seinem Blogbeitrag "Testing R Packages" drei formale Approaches und schlägt mit seinem package `testit` noch einen vierten vor. Zusätzlich ist sicherlich noch das informelle Testen von R Code in der Konsole zu nennen, laut [@Wickham2011] eine häufige Praxis in der R Community.  
 
-https://yihui.name/en/2013/09/testing-r-packages/
+Die 5 Testing Approaches sind demnach:  
+1. Testing in der Konsole  
+2. Testing mittels Textvergleich  
+3. `RUnit` und `svUnit`  
+4. `testit`  
+5. `testthat`    
 
-[@Wickham2011]
 
 ### Testing in der Konsole  
 R ist eine Skriptsprache. Das heisst jede Zeile Code kann zu jedem Zeitpunkt ohne Compilieren ausgeführt werden. R Programmierer nutzen diese Eigenschaft typischerweise sehr intensiv: Bei der Entwicklung einer Funktion werden die einzelnen Bestandteile direkt in der Konsole getestet, korrigiert und danach im Skript platziert. Das heisst das Testing in der Konsole ist typischerweise die erste Variante, wie R Code getestet wird. [@Wickham2011] schreibt hierzu: "es ist nicht so, dass wir unseren Code nicht testen, aber wir speichern die Tests nicht, so dass wir sie automatisert wieder laufen lassen können."
 
-https://yihui.name/en/2013/09/testing-r-packages/  
-### Textvergleichs-Approach  
-tests are put under package/tests/, and a foo-test.Rout.save from R CMD BATCH foo-test.R; testing is done by comparing foo-test.Rout from R CMD check with your foo-test.Rout.save; R notifies you when it sees text differences; this is typically used by R core and followers  
+### Testing mittels Textvergleichs  
+Testing mittels Textvergleich ist ein älteres Testverfahren, welches in der R Community weit verbreitet ist. Die R Core packages beispielsweise werden auf diese Weise getestet.  
+Dabei werden Testfälle unter `package/tests/` gespeichert. Mittels `R CMD BATCH foo-test.R` werden die Tests ausgeführt. Die Outputs aus dem Test werden dadurch im File `foo-test.Rout.save` gespeichert. Das Testing geschieht danach indem das File `foo-test.Rout`, generiert mit `R CMD check` mit dem vorab gespeicherten `foo-test.Rout.save` verglichen wird. Die Funktion `R CMD check` informiert den Tester automatisch, falls Differenzen bestehen. [@YihuiXie]
 
-### RUnit and its followers:  
-formal ideas were borrowed from other languages and frameworks and it looks there is a lot to learn before you can get started  
-### the testthat family:  
+### `RUnit` und `svUnit`   
+Mit `RUnit` und `svUnit` existieren zwei packages, welche das XUnit Framework in R implementieren. `RUnit` und `svUnit` sind ähnlich aufgebaut und orientieren sich an `jUnit`. Beide packages konnten sich in der R Community jedoch nicht durchsetzen. [@Wickham2011] und [@YihuiXie] schreiben, dass der Einarbeitungs- und Einrichtungsaufwand wohl bei beiden Packages zu gross sei.
+
+### Testing mittels `testit`  
+For me, I only want one thing for unit testing: I want the non-exported functions to be visible to me during testing; unit testing should have all “units” available, but R’s namespace has intentionally restricted the objects that are visible to the end users of a package, which is a Very Good Thing to end users. It is less convenient to the package author, since he/she will have to use the triple colon syntax such as foo:::hidden_fun() when testing the function hidden_fun().
+
+I did not like the first approach (text comparison), and I did not want to learn or remember the new vocabulary of RUnit or testthat. There is only one function for the testing purpose in this package: assert().
+
+
+
+### Testing mittels `testthat`  
+`testthat` ist neuer als `RUnit` und `svUnit`. Der Autor Hadley Wickham ist einer der wichtigsten R-Entwickler der letzten Jahre, wenn nicht der wichtigste überhaupt.[^23]  
+
+`testthat` hat sich in den letzten Jahren als de-facto Standard für das automatisierte Unit-testing in R etabliert.[^24] Im Folgenden wollen wir uns daher vertiefter mit `testthat` auseinandersetzen.
+
+
 tests are expressed as expect_something() like a natural human language
 
-# `testthat`
 
+[^23]: Laut https://www.rdocumentation.org ist Hadley Wickham der Topautor überhaupt. Seine packages werden durch die Community am meisten genutzt.
+[^24]: Die Zunahme an packages mit formalen Tests ist quasi alleine auf testthat zurückzuführen: https://github.com/rstudio/webinars/blob/master/28-covr/covr-Rstudio_webinar.pdf
+
+
+# `testthat`  
 [@Wickham2015], [@Wickham2011]
+
+
+## Test Workflow  
+
+## Test Struktur  
+
+## Expectations - Erwartungen  
+
+## Tests schreiben  
+
+## Was testen?  
+
+## Tests skippen  
+
+## Schreiben eigener Expectations  
+
+## Tricks für CRAN  
+
+## `testthat` in Skripts nutzen  
 
 
 ```{r}
@@ -125,13 +166,11 @@ test_that("add works", {
 
 
 
-## Konkurrenzprodukte
-RUnit und svUnit
 
 
 \newpage
 
-# Nützliche Erweiterungen  
+# Nützliche Erweiterungen zu `testthat`    
 `testthat` kann sinnvoll erweitert werden.  
 
 ## `devtools`  
