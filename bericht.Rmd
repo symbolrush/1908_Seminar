@@ -70,6 +70,7 @@ Tools, welche das (automatisierte) Testen unterstützen gibt es viele. Alleine i
 Warum also braucht es mit `testthat` nochmals ein neues Framework. [@Hunt2000] argumentieren in Ihrem Buch, dass Testing mehr ein kulturelles als ein technisches Problem sei. Die Kultur des Testens könne in ein Projekt eingebunden werden unabhängig von der Programmiersprache. [@Hunt2000, S.197]  
 Genau hier setzt `testthat` an. Der Entwickler von Testthat Hadley Wickham, Chief Scientist bei RStudio und Autor mehrerer Bücher und der wichtigsten R packages der letzten Jahre [^21], schreibt hierzu, dass Software Testing wichtig sei, aber, dass es viele nicht tun, weil es frustrierend und langweilig ist. [@Wickham2011]  `testthat` versucht dies zu ändern, indem es sich besonders einfach in den Workflow von R Programmierern einbinden lässt, einfach zu lernen ist und gut skaliert. Insbesondere der schnell mögliche Einstieg in `testthat` versucht genau die "Kultur des Testens" zu katalysieren.  
 Er argumentiert, dass automatisiertes Testen zwar etwas Zusatzaufwand bedeutet, sich jedoch in viererlei Hinsichten ausbezahlt:  
+
 1. **Weniger Frustration**. Die Arbeit an der aktuell zu entwickelnden Software aufzugeben, um Bugs in (alter) Software zu suchen ist frustrierend. Gut getestete Software hat weniger Bugs, weniger Zeit geht mit der mühsamen Suche nach (alten) Bugs verloren.  
 2. **Bessere Code Struktur**. Gut geschriebener Code ist einfacher zu testen. Häufig führt eine Kultur des Testens auch dazu, dass der Code umgeschrieben wird, bis er besser testbar ist. Dasselbe Argument führen auch [@Hunt2000] ins Feld.  
 3. **Besserer Wiedereinstieg in die Arbeit nach einer (längeren) Pause**. Wenn eine Codeing-Sitzung damit abgeschlossen wird einen Test für das nächste zu entwickelnde Feature zu schreiben ist bei der Wiederaufnahme der Arbeit sofort klar, welcher Test einen Fehler wirft und welche Methode demzufolge als nächstes entwickelt werden sollte.  
@@ -90,6 +91,7 @@ Meine Erfahrung bei der Entwicklung von `sim911`, einer Sammlung von R packages 
 In R existieren viele Testing Approaches. [@YihuiXie], Autor von `knitr` und weiteren R packages im Bereich "Publishing", nennt in seinem Blogbeitrag "Testing R Packages" drei formale Approaches und schlägt mit seinem package `testit` noch einen vierten vor. Zusätzlich ist sicherlich noch das informelle Testen von R Code in der Konsole zu nennen, laut [@Wickham2011] eine häufige Praxis in der R Community.  
 
 Die 5 Testing Approaches sind demnach:  
+
 1. Testing in der Konsole  
 2. Testing mittels Textvergleich  
 3. `RUnit` und `svUnit`  
@@ -131,11 +133,52 @@ tests are expressed as expect_something() like a natural human language
 [@Wickham2015], [@Wickham2011]
 
 
-## Test Workflow  
+## Test Workflow   
+Die Integration von `testthat` in ein bestehendes Package ist enorm einfach. Die Funktion `devtools::use_testthat` aus dem `devtools`[^31] Package erstellt die nötigen Ordner und Files. Dies sind:
 
-## Test Struktur  
+1. Ein Ordner `tests/testthat` im Verzeichnis des aktuellen Packages.  
+2. Ein File `tests/testthat.R`, welches alle Tests ausführt, wenn `R CMD check` aufgerufen wird. Dies ist wichtig für das Deployment eines Packages auf CRAN.  
+
+Auch der weitere Workflow ist erdenklich einfach:  
+
+1. Änderungen an Code oder Tests vornehmen.  
+2. Das Package testen mit `devtools::test()` oder Ctrl/Cmd-Shift-T.  
+3. Schritte 1 und 2 wiederholen, bis das Package fehlerfrei ist.  
+
+`testthat` erstellt während dem Testen automatisch einen Statusreport in der Konsole oder in RStudio.
+
+## Test Struktur   
+`testthat` organisiert die Tests in einer hierarchischen Struktur. *expectations* werden zu *tests* zusammengefasst, mehrere *tests* werden in einem *context* zusammengefasst. Typischerweise besteht ein 1:1 Matching zwischen *context* und Datei. Dies ist aber nicht eine Notwendigkeit, eine Datei kann auch mehrere *contexts* enthalten.  
+
+- *expectations*, also Erwartungen, sind die kleinste Einheit des Testens. Mit einer *expectation* wird das bei einer Berechnung erwartete Resultat beschrieben.  
+- Ein *test* gruppiert mehrere *expectations*, um eine Eigenschaft einer Funktion zu testen. Im Falle von einfachen Funktionen kann ein *test* auch eine gesamte Funktion testen.  
+- Der *context* gruppiert mehrere zusammengehörige Tests und gibt der Gruppe von Tests einen verständlichen Namen, welcher auch im Statusreport erscheint.  
 
 ## Expectations - Erwartungen  
+Expectations sind die kleinste Einheit des Testens. Eine Expectation macht eine binäre Assertion darüber, ob das Resultat eines Funktionsaufrufs mit dem erwarteten Resultat übereinstimmt. Alle Expectations haben dieselbe Struktur:  
+
+1. Die Funktionensnamen starten mit `expect_`
+1. Sie haben zwei Argumente, das erste Argument ist das Resultat der zu testenden Funktion, das zweite das erwartete Resultat.
+1. Eine Expectation wirft einen Fehler, wenn die beiden Resultate nicht übereinstimmen.
+
+Das `testthat` Package umfasst mittlerweile an die 30 Expectations. Die wichtigsten daraus werden im Folgenden einzeln vorgestellt.  
+
+> Eventuell umschreiben, anhand Dokumentation von testthat. Die Organisation dort ist: Test auf Gleichheit, Vergleichstests, etc...
+https://cran.r-project.org/web/packages/testthat/testthat.pdf
+
+### `expect_equal()` und `expect_identical()`  
+afdad
+
+### `expect_match()`  
+
+
+### `expect_message()`, `expect_warning()` und `expect_error`  
+
+### `expect_is()`
+
+### Weitere Expectations  
+
+
 
 ## Tests schreiben  
 
