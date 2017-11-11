@@ -265,7 +265,69 @@ Aufgrund meiner eigenen Erfahrungen schlage ich den folgenden "Algorithmus" für
 Dieses Vorgehen hat nach meinen Erfahrungen einen entscheidenden Vorteil gegenüber der von Beginn weg starren 1:1 Zuordnung. Zu Beginn einer Entwicklung ist das Naming der Funktionen und damit auch das des Testcodes (Kontexte und Tests) noch sehr volatil. Wenn hier von Beginn weg eine (zu) granulare Organisationsstruktur eingehalten wird, führt das Entweder zu häufigem Wechseln von Dateinamen und Kontexten, was ein unnötiger Aufwand ist, oder aber zu Beginn eingeführte (und häufig nicht optimale) Namensgebungen werden beibehalten, um Änderungen zu vermeiden. Die Nutzung der flexiblen Regeln nach obigem Algorithmus verhindert dies.
 
 ## Was testen?  
+Nachdem wir wissen, *wie* mit `testthat` getestet werden kann, widmen wir uns nun der viel wichtigeren und nicht so eindeutig beantwortbaren Frage *was* (mit `testthat`) getestet werden soll. Im Folgenden möchte ich mich dieser "philososphischen" Frage anhand verschiedener Zitate nähern und durch meine eigene Einschätzungen abrunden.  
 
+Starten möchte ich mit Martin Fowler[^33], einem der Gründerväter der agilen Softwareentwicklung:
+
+> "Whenever you are tempted to type something into a print statement or a debugger expression, write it as a test instead."
+
+Diese Guideline ist sicherlich ein guter Startpunkt. Die Frage ist jedoch, ob man so bei (zu) vielen Testfällen landet, welche künftige Änderungen am Code erschweren.
+
+Hadley Wickham schreibt hierzu in [@Wickham2015]:
+
+> "There is a fine balance to writing tests. Each test that you write makes your code less likely to change inadvertently; but it also can make it harder to change your code on purpose."
+
+Hadley Wickham schreibt in seinem Buch auch, dass es schwierig sei generell gültige Aussagen zur Menge der notwendigen Tests zu geben. Wo also beginnen?
+
+Programmierer im Umfeld von R bedeutet nutzen beim Entwickeln häufig die Interaktivität von R aus und testen sowohl einzelne Zeilen als auch ganze Funktionen interaktiv in der Konsole. Diese Testfälle direkt in `testthat` zu implementieren ist sicherlich ein guter Startpunkt und auch, wie Abschnitt [3.10 `testthat` in Skripts nutzen](#testthat_in_skripts) gezeigt wird, ohne grossen Aufwand möglich. Diese Art von Tests zu Automatisieren ist auch eine der Hauptmotivationen, welche Hadley Wickham in [@Wickham2011] darlegt:  
+
+> "I'd perform many interactive tests to make sure the code worked, but I never had a system for retaining these tests and running them, again and again."
+
+Ein weiterer enorm wichtiger Punkt spiegelt das folgende Zitat aus "The Pragmatic Programmer" wieder:
+
+> "Find Bugs Once."
+
+Sobald ein Tester einen Bug findet, sollte ein Testfall geschrieben werden, welcher den Bug abfängt. Falls derselbe Bug ein zweites Mal auftritt sollte er von `testthat` automatisch gefunden werden und nicht wieder vom Entwickler, Tester oder Anwendern. [@Hunt2000] Denselben Rat gibt auch Hadley Wickham in [@Wickham2011] und Wilson et al. geben in [@Wilson2014] den Satz:
+
+> "Turn bugs into test cases."
+
+als eine der vorgeschlagenen Best Practices an.
+
+Im Umfeld des Scientific Programming ist zudem eine andere Guideline eine gute Entscheidungshilfe, wann Testfälle geschrieben werden sollen. Tests sollen sicherstellen, dass Funktionen dem Problemverständnis des Wissenschaftlers entsprechendes Verhalten aufweisen. Hierfür werden z.B. Tests geschrieben, welche Funktionsoutput mit vereinfachenden Rechnungen, mit Daten aus Experimenten oder mit Resultaten älterer, vertrauenswürdiger Software vergleichen. [@Wilson2014]
+
+Wilson et al. schreiben hierzu:
+
+> "Tests check to see whether the code matches the researcher's expectations of its behavior, which depends on the researcher's understanding of the problem at hand."
+
+Eine weitere Dimension der Frage *was* man testen sollte wird in den folgenden beiden Zitaten angeschnitten.  
+
+> "Avoid testing simple code that you're confident will work."
+
+Dies schreibt Hadley Wickham in [@Wickham2015] und [@Hunt2000] schreiben:
+
+> "Most developers hate testing. They tend to test gently, subconcsciously knowing where the code will break and avoiding the weak spots."
+
+Die Menge der Testfälle garantiert eben noch keine gute Qualität der Testfälle.
+
+Die genannten Zitate und Dimensionen der Frage nach dem *was* erlauben die Destillation der folgenden Guidelines beim Schreiben von Tests für die Nutzung von `testthat` im Rahmen des Scientific Computing:
+
+1. **Teste (als Wissenschaftler) deine inhaltliche Erwartungshaltung.** Was ist dein Modell der Funktion, welche du am Entwickeln bist? Gibt es (vereinfachende) Testfälle (z.B. obere- oder untere Schranken einer Berechnung), welche du ohne aufwändige Testfälle angeben kannst? Gibt es obere oder untere Extremwerte, welche getestet werden können? Welche Anwendungsfälle hast du im Kopf und würdest du auf der Konsole interaktiv testen wollen? Schreibe diese als Tests nieder. Dieser Ansatz kann gut auch mit der "test-first" Philosophie kombiniert werden.[^34]
+1. **Turn bugs into testcases.** Sobald ein Bug auftaucht, schreibe einen Testfall, welcher den Bug abfängt. Korrigiere den Bug danach.
+1. **Sei Rücksichtslos.** Schreibe als nächstes den Test, welcher deiner Meinung nach die grösste Chance hat nicht erfolgreich durchzulaufen. Siehe hierzu auch [@Hunt2000, S.237ff.]. Die Befolgung dieser Maxime stellt ein Stück weit auch sicher, dass nicht (zu) viele Tests geschrieben werden, welche kaum einen Impact auf die Güte der Tests haben.
+
+Aus einer Informatiksicht lassen sich zusätzlich die folgenden Guidelines nennen:
+
+4. **Fokussiere beim Testen auf das externe Interface.** Wird nur das Interface getestet und nicht die Implementierung, lassen sich Änderungen an der Implementierung trotz Tests durchführen. Wenn auch die Implementierung getestet wird, müssen bei Änderungen am Code auch die Tests geändert werden. [@Wickham2015]
+5. **Teste jedes Verhalten in genau einem Test.** Änderungen am Code ziehen so nur Änderungen an genau einem Test nach sich. [@Wickham2015]
+
+Ungeklärt ist nun noch *mit was* getestet werden soll. Meine eigene Arbeit hat mich in den letzten Jahren gelernt, dass im Umfeld des Scientific Computing unbedingt mit synthethischen und echten Daten getestet werden muss. Die Arbeit mit synthetischen Daten ist sehr einfach möglich. Diese lassen sich meist sehr einfach genererien. Die erwarteten Resultate lassen sich mit synthetischen Daten dabei meist kognitiv nachvollziehen. Daher sind synthetische Daten enorm wertvoll um die inhaltliche Erwartungshaltung zu testen und können sehr schnell formuliert werden. Bei Tests mit echten Daten hingegen ist es viel schwieriger (oder nahezu unmöglich) das korrekte Resultat kognitiv nachzuvollziehen. Die Verifizierung von korrekten Testresultaten ist also enorm schwierig. Dagegen haben reale Daten häufig andere Eigenschaften, als die synthetischen Testdaten. Die Nutzung von zusätzlichen Tests mit realen Daten erlauben es, zu schauen, ob eine Implementierung auch mit diesen Eigenschaften umgehen kann. Falls sich korrekte Resultate auf echten Daten nicht kognitiv bestimmen lassen können diese dennoch wertvoll sein und z.B. gegenüber oberen- oder unteren Schranken getestet oder für Regressionstests verwendet werden. Ich formuliere daher noch die letzte Guideline:
+
+6. **Nutze echte und synthetische Daten.**
+
+
+
+[^33]: https://martinfowler.com/
+[^34]: http://www.extremeprogramming.org/rules/testfirst.html
 
 ## Tests skippen  
 
@@ -275,8 +337,8 @@ Dieses Vorgehen hat nach meinen Erfahrungen einen entscheidenden Vorteil gegenü
 
 ## Tricks für CRAN  
 
-## `testthat` in Skripts nutzen  
-
+## `testthat` in Skripts nutzen {#testthat_in_skripts}  
+...
 
 ```{r}
 library(testthat)
