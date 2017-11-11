@@ -180,13 +180,69 @@ afdad
 
 
 
-## Tests schreiben  
+## Tests  
+Jeder Test sollte erstens einen informativen Namen haben und zweitens eine einzige Funktionalität testen. Der informative Namen beschreibt dabei die Idee des Tests. [@Wickham2015] schlägt vor, dass der Name des Tests den Satz "Test that..." vervollständigt. Diese Konvention erhöht die Lesbarkeit und hilft die Idee des Tests auch in Zukunft zu verstehen. Die Namensgebung entlangt dem Pattern "Test that..." ist ebenfalls eine schöne Anwendung des Axioms "Write programs for people, not computers", wie es u.A. [@Wilson2014] erwähnen. Dass ein Test nur eine einzige Funktionalität testen soll ist ebenfalls einsichtig: so ist direkt klar, welche Funktion einen Fehler verursacht. Tests werden in `testthat` mithilfe der Funktion `test_that()` geschrieben. `test_that()` nimmt zwei Argumente, das Argument `desc` enthält den Namen des Tests und das Argument `code` die Testanweisungen in geschleiften Klammern. Das folgende Beispiel zeigt diese Teststruktur. Das Beispiel stammt aus der Dokumentation von `testthat`.[^32]
+
+```{r, eval = FALSE}
+test_that("trigonometric functions match identities", {
+  expect_equal(sin(pi / 4), 1 / sqrt(2))
+  expect_equal(cos(pi / 4), 1 / sqrt(2))
+  expect_equal(tan(pi / 4), 1)
+})
+```
+
+Die Zuordnung der Expectations zu Tests ist in `testthat` nicht eingeschränkt. Ein Test kann 1:n Expectations enthalten. [@Wickham2015] schlägt vor, nicht zu viele Expectations einem Test zuzuordnen, so dass die Fehlersuche schnell vonstatten geht.
+
+Jeder Test wird von R in einem eigenen Environment ausgeführt und ist in sich abgeschlossen. Alle zur Durchführung eines Tests notwendigen Daten müssen also in diesem Test generiert werden. Das folgende Beispiel zeigt diesen Sachverhalt:
+
+```{r, eval = FALSE}
+test_that("numbers are added correctly", {
+  a <- 2
+  b <- 1
+  expect_equal(a + b, 3)
+})
+
+test_that("the result of an addition is still a numeric", {
+  expect_is(a + b, "numeric")
+})
+```
+
+Der erste Test überprüft, dass die Addition `a + b` das richtige Resultat zurückgibt, der zeite Test prüft die Klasse des Resultats. Dieser Code kann so jedoch nicht ausgeführt werden, da der zweite Test die beiden Variablen `a` und `b` nicht kennt, gibt R einen Fehler
+
+```{r, eval = FALSE}
+Fehler: Test failed: 'the result of an addition is still a numeric'
+* Objekt 'a' nicht gefunden
+```
+
+zurück. Werden die beiden Variablen jedoch ausserhalb der Tests definiert, findet R sie im `Global Environment` und die beiden Tests laufen korrekt durch.  
+
+```{r, eval = FALSE}
+a <- 2
+b <- 1
+
+test_that("numbers are added correctly", {
+  expect_equal(a + b, 3)
+})
+
+test_that("the result of an addition is still a numeric", {
+  expect_is(a + b, "numeric")
+})
+```
+
+`testthat` detektiert jedoch nicht, ob ein Test etwas an der R "Landschaft" ändert. Änderungen am Dateisystem, am Suchpfad (aufgrund von Calll der Funktionen `library()` oder `attach()`) und an den globalen Optionen (`options()` und `par()`) werden nicht erkannt.  
+
+Wenn Tests diese Aktivitäten nutzen, muss der Anwender selber sicherstellen, dass keine unerwünschten Nebenwirkungen auftreten. Obwohl viele andere Testing Frameworks dies sicherstellen argumentiert [@Wickham2015], dass dies im Kontext von `testthat` nicht so wichtig sei. Wie das Beispiel oben zeigt ist es einerseits möglich Objekte, welche von mehreren Tests genutzt werden ausserhalb der Tests zu definieren. Für das Rückgängigmachen anderer Aktionen schlägt [@Wickham2015] die Nutzung regulärer R Funktionalität vor.
+
+[^32]: https://www.rdocumentation.org/packages/testthat/versions/1.0.2/topics/test_that
 
 ## Was testen?  
 
+
 ## Tests skippen  
 
+
 ## Schreiben eigener Expectations  
+
 
 ## Tricks für CRAN  
 
