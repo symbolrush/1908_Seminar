@@ -235,6 +235,35 @@ Wenn Tests diese Aktivitäten nutzen, muss der Anwender selber sicherstellen, da
 
 [^32]: https://www.rdocumentation.org/packages/testthat/versions/1.0.2/topics/test_that
 
+## Kontexte und Dateien  
+Der Kontext ist die oberste Organisationsstruktur innerhalb von `testthat`. Ein Kontext gruppiert eine Menge von Tests, welche verwandte Funktionalität testen. Ein Kontext wird durch den Call der Funktion `context("Name des Kontextes")` etwabliert. Die Namen der Kontexte erscheinen auch im Konsolenoutput beim Testen. 
+
+```{r, eval = FALSE}
+context("Adding numbers with R")
+
+a <- 2
+b <- 1
+
+test_that("numbers are added correctly", {
+  expect_equal(a + b, 3)
+})
+
+test_that("the result of an addition is still a numeric", {
+  expect_is(a + b, "numeric")
+})
+```
+
+
+Hadley Wickham schlägt in [@Wickham2015] vor, dass es eine 1:1 Zuordnung Kontext <> Datei gibt. In früheren Dokumenten [@Wickham2011] sowie in der Dokumentation der `context` Funktion ist diese Leitlinie noch weniger fix formuliert.
+
+Aufgrund meiner eigenen Erfahrungen schlage ich den folgenden "Algorithmus" für die Organisation von Kontexten und Dateien vor:
+
+1. Alle Tests sind in einer Datei.
+1. Kontexte werden nach und nach eingeführt, sobald sich Inhaltliche Gruppierungen ergeben.
+1. Sobald der Testcode einer Datei mehr als 100 Zeilen umfasst wird der längste Kontext dieser Datei in eine eigene Datei ausgelagert.
+
+Dieses Vorgehen hat nach meinen Erfahrungen einen entscheidenden Vorteil gegenüber der von Beginn weg starren 1:1 Zuordnung. Zu Beginn einer Entwicklung ist das Naming der Funktionen und damit auch das des Testcodes (Kontexte und Tests) noch sehr volatil. Wenn hier von Beginn weg eine (zu) granulare Organisationsstruktur eingehalten wird, führt das Entweder zu häufigem Wechseln von Dateinamen und Kontexten, was ein unnötiger Aufwand ist, oder aber zu Beginn eingeführte (und häufig nicht optimale) Namensgebungen werden beibehalten, um Änderungen zu vermeiden. Die Nutzung der flexiblen Regeln nach obigem Algorithmus verhindert dies.
+
 ## Was testen?  
 
 
