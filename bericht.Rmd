@@ -129,7 +129,7 @@ tests are expressed as expect_something() like a natural human language
 [^24]: Die Zunahme an packages mit formalen Tests ist quasi alleine auf testthat zurückzuführen: https://github.com/rstudio/webinars/blob/master/28-covr/covr-Rstudio_webinar.pdf
 
 
-# `testthat`  
+# Testing mit dem Package `testthat`  
 [@Wickham2015], [@Wickham2011]
 
 
@@ -329,7 +329,38 @@ Ungeklärt ist nun noch *mit was* getestet werden soll. Meine eigene Arbeit hat 
 [^33]: https://martinfowler.com/
 [^34]: http://www.extremeprogramming.org/rules/testfirst.html
 
-## Tests skippen  
+## Tests skippen   
+Es gibt Situationen, in denen es sinnvoll sein kann einen Test zu überspringen, ihn zu skippen.  
+Dies kann verschiedene Gründe haben:  
+1. Ein Test greift auf eine externe API zu, welche momentan offline ist.
+1. Ein Test greift auf eine Datei zu, welche momentan nicht verfügbar ist. (Beispielsweise, weil sie auf einem Rechner eines anderen Netzwerks liegt)
+1. Tests greifen auf andere Systeme zu, welche momentan nicht zur Verfügung stehen.
+
+In solchen Situationen kann es nützlich sein, einen Test zu überspringen. So gibt `testthat` keine Fehlermeldung zurück, sondern vermeldet einfach, dass ein oder mehrere Tests übersprungen wurden.
+
+Zu diesem Zweck stellt `testthat` die Funktion `skip()` zur Verfügung. Statt einem Fehler zurückzugeben schreibt `skip()` ganz einfach ein $S$ in die Konsole.
+
+```{r, eval = FALSE}
+test_that("...", {
+  skip("Grund für das Skippen des Tests.")
+  ...
+})
+```
+
+Das Beispiel oben nutzt `skip()` auf statische Art. Um den Test wieder laufen zu lassen, muss `skip()` gelöscht, bzw. auskommentiert werden. Häufig ist es eine bessere Idee `skip()` dynamisch zu nutzen. Die Bedingung unter welcher geskippt werden soll kann programmatisch abgefangen werden. Der Test wird, sobald beispielsweise eine API wieder zur Verfügung steht automatisch wieder ausgeführt. Das folgende Beispiel aus [@Wickham2015] zeigt diese Art der Nutzung.
+
+```{r, eval = FALSE}
+check_api <- function() {
+  if (not_working()) {
+    skip("API not available")
+  }
+}
+
+test_that("foo api returns bar when given baz", {
+  check_api()
+  ...
+})
+```
 
 
 ## Schreiben eigener Expectations  
