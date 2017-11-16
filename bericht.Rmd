@@ -364,7 +364,94 @@ test_that("foo api returns bar when given baz", {
 
 
 ## Schreiben eigener Expectations  
+As you start to write more tests, you might notice duplication in your code. For example, the following code shows one test of the `floor_date()` function from `library(lubridate)`. There are seven expectations that check the results of rounding a date down to the nearest second, minute, hour, etc. There's a lot of duplication (which increases the chance of bugs), so we might want to extract common behaviour into a new function.
 
+```{r}
+library(lubridate)
+test_that("floor_date works for different units", {
+  base <- as.POSIXct("2009-08-03 12:01:59.23", tz = "UTC")
+
+  expect_equal(floor_date(base, "second"), 
+    as.POSIXct("2009-08-03 12:01:59", tz = "UTC"))
+  expect_equal(floor_date(base, "minute"), 
+    as.POSIXct("2009-08-03 12:01:00", tz = "UTC"))
+  expect_equal(floor_date(base, "hour"),   
+    as.POSIXct("2009-08-03 12:00:00", tz = "UTC"))
+  expect_equal(floor_date(base, "day"),    
+    as.POSIXct("2009-08-03 00:00:00", tz = "UTC"))
+  expect_equal(floor_date(base, "week"),   
+    as.POSIXct("2009-08-02 00:00:00", tz = "UTC"))
+  expect_equal(floor_date(base, "month"),  
+    as.POSIXct("2009-08-01 00:00:00", tz = "UTC"))
+  expect_equal(floor_date(base, "year"),   
+    as.POSIXct("2009-01-01 00:00:00", tz = "UTC"))
+})
+```
+
+I'd start by defining a couple of helper functions to make each expectation more concise. That allows each test to fit on one line, so you can line up actual and expected values to make it easier to see the differences:
+
+```{r}
+test_that("floor_date works for different units", {
+  base <- as.POSIXct("2009-08-03 12:01:59.23", tz = "UTC")
+  floor_base <- function(unit) floor_date(base, unit)
+  as_time <- function(x) as.POSIXct(x, tz = "UTC")
+
+  expect_equal(floor_base("second"), as_time("2009-08-03 12:01:59"))
+  expect_equal(floor_base("minute"), as_time("2009-08-03 12:01:00"))
+  expect_equal(floor_base("hour"),   as_time("2009-08-03 12:00:00"))
+  expect_equal(floor_base("day"),    as_time("2009-08-03 00:00:00"))
+  expect_equal(floor_base("week"),   as_time("2009-08-02 00:00:00"))
+  expect_equal(floor_base("month"),  as_time("2009-08-01 00:00:00"))
+  expect_equal(floor_base("year"),   as_time("2009-01-01 00:00:00"))
+})
+```
+
+We could go a step further and create a custom expectation function:
+
+```{r}
+base <- as.POSIXct("2009-08-03 12:01:59.23", tz = "UTC")
+
+expect_floor_equal <- function(unit, time) {
+  expect_equal(floor_date(base, unit), as.POSIXct(time, tz = "UTC"))
+}
+expect_floor_equal("year", "2009-01-01 00:00:00")
+```
+
+However, if the expectation fails this doesn't give very informative output:
+
+```{r, error = TRUE, eval = FALSE}
+expect_floor_equal("year", "2008-01-01 00:00:00")
+```
+
+Instead you can use a little [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html) to produce something more informative. The key is to use `bquote()` and `eval()`. In the `bquote()` call below, note the use of `.(x)` - the contents of `()` will be inserted into the call.
+
+```{r, error = TRUE, eval = FALSE}
+expect_floor_equal <- function(unit, time) {
+  as_time <- function(x) as.POSIXct(x, tz = "UTC")
+  eval(bquote(expect_equal(floor_date(base, .(unit)), as_time(.(time)))))
+}
+expect_floor_equal("year", "2008-01-01 00:00:00")
+```
+
+This sort of refactoring is often worthwhile because removing redundant code makes it easier to see what's changing. Readable tests give you more confidence that they're correct.
+
+```{r}
+test_that("floor_date works for different units", {
+  as_time <- function(x) as.POSIXct(x, tz = "UTC")
+  expect_floor_equal <- function(unit, time) {
+    eval(bquote(expect_equal(floor_date(base, .(unit)), as_time(.(time)))))
+  }
+
+  base <- as_time("2009-08-03 12:01:59.23")
+  expect_floor_equal("second", "2009-08-03 12:01:59")
+  expect_floor_equal("minute", "2009-08-03 12:01:00")
+  expect_floor_equal("hour",   "2009-08-03 12:00:00")
+  expect_floor_equal("day",    "2009-08-03 00:00:00")
+  expect_floor_equal("week",   "2009-08-02 00:00:00")
+  expect_floor_equal("month",  "2009-08-01 00:00:00")
+  expect_floor_equal("year",   "2009-01-01 00:00:00")
+})
+```
 
 ## Tricks für CRAN   
 Sobald ein R package auf CRAN deployed werden soll, müssen an den Tests eventuell einige Anpassungen gemacht werden. CRAN testet immer auf allen verfügbaren Plattformen, d.h. Windows, Mac, Linux und Solaris. Daher müssen plattformspezifische Tests möglichst vermieden werden.
