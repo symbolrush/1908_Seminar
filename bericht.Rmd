@@ -366,7 +366,16 @@ test_that("foo api returns bar when given baz", {
 ## Schreiben eigener Expectations  
 
 
-## Tricks für CRAN  
+## Tricks für CRAN   
+Sobald ein R package auf CRAN deployed werden soll, müssen an den Tests eventuell einige Anpassungen gemacht werden. CRAN testet immer auf allen verfügbaren Plattformen, d.h. Windows, Mac, Linux und Solaris. Daher müssen plattformspezifische Tests möglichst vermieden werden.
+
+Die folgenden Anhaltspunkte nennt [@Wickham2015]:  
+
+1. Tests müssen auf CRAN relativ schnell laufen. Zielwert ist weniger als eine Minute. Tests, welche eine sehr lange benötigen können mit `skip_on_cran()` versehen werden. Damit werden Sie auf CRAN nicht ausgeführt.
+1. Tests werden immer in Englisch ausgeführt ($LANGUAGE=EN$) und sind $C$ sortiert ($LC_COLLATE=C$). Dies minimiert Differenzen zwischen den Plattformen.
+1. Gewisse Dinge können auf CRAN Maschinen anderes Verhalten aufweisen, als auf lokalen R Installationen. Beispielsweise können Laufzeiten stark variieren, da CRAN Maschinen stark ausgelastet sind. Auch Parallelisierungen können eventuell nicht funktionieren, da auf CRAN verschiedene Prozesse parallelisiert werden und dadurch für das Testing eines Packages möglicherweise nur ein Kern zur Verfügung steht. Auch die nummerische Präzision kann zwischen verschiedenen Plattformen variieren. Daher sollte eher `expect_equal()` statt `expect_identical()` verwendet werden.
+
+
 
 ## `testthat` in Skripts nutzen {#testthat_in_skripts}  
 ...
