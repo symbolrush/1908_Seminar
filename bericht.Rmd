@@ -25,7 +25,7 @@ bibliography: bibliography.bib
 preamble: |
   % Any extra latex you need in the preamble
 abstract: |
-  Dieser Seminarbeitrag stellt das `testthat` Package für automatisierte Testen von R packages vor. Einleitend wird eine kurze Einführung in R gegeben, sowie einige grundlegende Gedanken zum Testing allgemein, sowie zum Testing im Scientific Computing vorgestellt. Abgeschlossen wird der Beitrag von einen Gedanken zur Erweiterung von `testthat`, um weitere Konzepte des Testings in R integrieren zu können.
+  Dieser Seminarbeitrag stellt das `testthat` Package für automatisiertes Testen von R packages vor. Einleitend wird eine kurze Einführung in R gegeben und einige grundlegende Gedanken zum Testing allgemein und spezifisch zum Testing im Scientific Computing vorgestellt. Einige Gedanken zur Erweiterung von `testthat` zur Integration weiterer Konzepte des Testings in R runden den Hauptteil ab.
 ---
 
 ```{r global_options, include=FALSE}
@@ -37,7 +37,7 @@ library(testthat)
 \pagenumbering{arabic} 
 
 # Einführung in R  
-2 Seiten
+
 
 ## Was ist R?  
 R ist eine Programmiersprache.[^11]  
@@ -65,39 +65,39 @@ Nützlich für Scientific Computing und Data Sciences. [@Peng2014, Introduction]
 ## Warum Testing?  
 Testing ist essenziell, denn jede Software wird getestet. [@Hunt2000] schreiben dazu in Ihrem Buch "The Pragmatic Programmer": "Test Your Software, or Your Users Will". Also lieber selber die Bugs finden, als von seinen Kunden (oder Kollegen) darauf hingewiesen werden.  
 Dennoch testen viele Programmierer nicht gerne. Testen wird als notwendiges Übel betrachtet, als Zusatzaufwand den es zu minimieren gilt. Häufig wird daher "nett" getestet: Kritische Stellen werden eher umschifft und nicht auf Herz und Nieren geprüft. [@Hunt2000, 237ff.]  
-Im Scientific Computing ist die Situation dabei eher noch schlechter als in der traditionellen Softwareentwicklung. Dies hat mehrere Gründe. [@Wilson2014] schreiben, dass Wissenschaftler zwar mehr und mehr Zeit mit der Entwicklung von Software verbringen, jedoch meistens kaum fundierte Kenntnisse in Softwareentwicklung haben. Dabei ist Software für die heutige Wissenschaft so wichtig wie Reagenzgläser und Teleskope. In der Folge wird von denselben Wissenschaftler, welche teure Messgeräte einsetzen und diese regelmässig kalibrieren schlecht getesteter Code für die Auswertung der Messdten benutzt. Die Folge sind nicht selten falsche Ergebnisse. [@Wilson2014] geben eine ganze Reihe von Artikeln aus bekannten wissenschaftlichen Journals an, welche sich mit der Richtigstellung von falschen Untersuchungen aufgrund von Programmierfehlern beschäftigen. Testing ist also wichtig, wenn die Software welche getestet wird nicht von zahlenden Kunden genutzt wird.  
-[@Hunt2000]
-Tools, welche das (automatisierte) Testen unterstützen gibt es viele. Alleine in R gibt es mit `svUnit` und `rUnit` zwei Implementierungen des XUnit Frameworks.  
-Warum also braucht es mit `testthat` nochmals ein neues Framework. [@Hunt2000] argumentieren in Ihrem Buch, dass Testing mehr ein kulturelles als ein technisches Problem sei. Die Kultur des Testens könne in ein Projekt eingebunden werden unabhängig von der Programmiersprache. [@Hunt2000, S.197]  
-Genau hier setzt `testthat` an. Der Entwickler von Testthat Hadley Wickham, Chief Scientist bei RStudio und Autor mehrerer Bücher und der wichtigsten R packages der letzten Jahre [^21], schreibt hierzu, dass Software Testing wichtig sei, aber, dass es viele nicht tun, weil es frustrierend und langweilig ist. [@Wickham2011]  `testthat` versucht dies zu ändern, indem es sich besonders einfach in den Workflow von R Programmierern einbinden lässt, einfach zu lernen ist und gut skaliert. Insbesondere der schnell mögliche Einstieg in `testthat` versucht genau die "Kultur des Testens" zu katalysieren.  
-Er argumentiert, dass automatisiertes Testen zwar etwas Zusatzaufwand bedeutet, sich jedoch in viererlei Hinsichten ausbezahlt:  
+Im Scientific Computing ist die Situation dabei eher noch schlechter als in der traditionellen Softwareentwicklung. Dies hat mehrere Gründe. [@Wilson2014] schreiben, dass Wissenschaftler zwar mehr und mehr Zeit mit der Entwicklung von Software verbringen, jedoch meistens kaum fundierte Kenntnisse in Softwareentwicklung haben. Dabei ist Software für die heutige Wissenschaft so wichtig wie Reagenzgläser und Teleskope. In der Folge wird von denselben Wissenschaftler, welche teure Messgeräte einsetzen und diese regelmässig kalibrieren schlecht getesteter Code für die Auswertung der Messdaten benutzt. Die Folge sind nicht selten falsche Ergebnisse. [@Wilson2014] geben eine ganze Reihe von Artikeln aus bekannten wissenschaftlichen Journals an, welche sich mit der Richtigstellung von falschen Untersuchungen aufgrund von Programmierfehlern beschäftigen. Testing ist also auch wichtig, wenn die Software welche getestet wird nicht von zahlenden Kunden genutzt wird.  
 
-1. **Weniger Frustration**. Die Arbeit an der aktuell zu entwickelnden Software aufzugeben, um Bugs in (alter) Software zu suchen ist frustrierend. Gut getestete Software hat weniger Bugs, weniger Zeit geht mit der mühsamen Suche nach (alten) Bugs verloren.  
-2. **Bessere Code Struktur**. Gut geschriebener Code ist einfacher zu testen. Häufig führt eine Kultur des Testens auch dazu, dass der Code umgeschrieben wird, bis er besser testbar ist. Dasselbe Argument führen auch [@Hunt2000] ins Feld.  
-3. **Besserer Wiedereinstieg in die Arbeit nach einer (längeren) Pause**. Wenn eine Codeing-Sitzung damit abgeschlossen wird einen Test für das nächste zu entwickelnde Feature zu schreiben ist bei der Wiederaufnahme der Arbeit sofort klar, welcher Test einen Fehler wirft und welche Methode demzufolge als nächstes entwickelt werden sollte.  
-4. **Mehr Vertrauen bei Änderungen am Code**. Wenn ein Entwickler weiss, dass jede Funktion gut getestet ist, lassen sich Änderungen mit viel besserem Gefühl umsetzen.  
+Tools, welche das (automatisierte) Testen unterstützen gibt es seit Jahren viele. Alleine in R gibt es mit `svUnit` und `rUnit` zwei Implementierungen des XUnit Frameworks.  
+Warum also braucht es mit `testthat` nochmals ein neues Framework?  
 
-Meine Erfahrung bei der Entwicklung von `sim911`, einer Sammlung von R packages für die Analyse und Simulation von Rettungsdiensteinsatzdaten, welche ich 2014 begonnen habe und in der Zwischenzeit von einem 4-köpfigen Team am IMS-FHS weiterentwickelt wird hat mich zusätzlich noch einen weiteren Punkt gelernt:  
-5. **Insgesamt mehr Vertrauen in den (eigenen) Code**. Einige Teile von `sim911`[^22] sind viel besser getestet als andere. Das Vertrauen in diese Teile ist viel höher, als in die anderen. Wenn ich einem Kollegen helfe einen Bug in einem Projekt zu finden ist dieses Vertrauen essentiell. Bei den schlecht getesteten Teilen bin ich mir einige Jahre nach dem Entwickeln selber nicht mehr sicher, ob sie jetzt mit anderen Situationen umgehen können oder nicht. Dies führt dazu, dass immer mal wieder Zeit damit verloren geht, das Vertrauen in (alten) Code zurückzugewinnen. Häufig ist der Bug dann doch nicht im schlecht getesteten Code. Wäre der Code gut getestet, wäre dies jedoch von Beginn weg klar.     
+[@Hunt2000] argumentieren in Ihrem Buch "The Pragmatic Programmer", dass Testing primär ein kulturelles Problem sei und weniger ein technisches. Die Kultur des Testens könne in ein Projekt jedoch eingebunden werden unabhängig von der Programmiersprache. [@Hunt2000, S.197]  
+Genau hier setzt `testthat` an. Der Entwickler von Testthat Hadley Wickham, Chief Scientist bei RStudio und Autor mehrerer Bücher und der wichtigsten R packages der letzten Jahre [^21], schreibt hierzu, dass Software Testing wichtig sei, aber, dass es viele nicht tun, weil es frustrierend und langweilig sei. [@Wickham2011]  `testthat` versucht dies zu ändern, indem es sich besonders einfach in den Workflow von R Programmierern einbinden lässt, einfach zu lernen ist und gut skaliert. Insbesondere der schnell mögliche Einstieg in `testthat` versucht genau die "Kultur des Testens" zu katalysieren.  
+Er argumentiert, dass automatisiertes Testen zwar etwas Zusatzaufwand bedeutet, sich jedoch in viererlei Hinsichten ausbezahlt [@Wickham2011 und @Wickham2015]:  
 
-[@Wickham2015] noch einarbeiten..
+1. **Weniger Bugs**. Das Schreiben von Tests führt dazu, dass das Verhalten (und damit die Erwartungen) der Software an zwei Orten beschrieben sind. Dabei testen die Tests den Code und umgekehrt. Dies führt zu Software mit weniger Bugs.
+2. **Bessere Code Struktur**. Gut geschriebener Code ist einfacher zu testen. Häufig führt eine Kultur des Testens auch dazu, dass der Code umgeschrieben wird, bis er besser testbar ist. Dasselbe Argument führen auch [@Hunt2000] ins Feld.
+3. **Besserer Wiedereinstieg in die Arbeit nach einer (längeren) Pause**. Wenn eine Codeing-Sitzung damit abgeschlossen wird einen Test für das nächste zu entwickelnde Feature zu schreiben ist bei der Wiederaufnahme der Arbeit sofort klar, welcher Test einen Fehler wirft und welche Methode demzufolge als nächstes entwickelt werden sollte.
+4. **Mehr Vertrauen bei Änderungen am Code**. Wenn ein Entwickler weiss, dass jede Funktion gut getestet ist, lassen sich Änderungen mit viel besserem Gefühl umsetzen.
 
-[^21: https://www.tidyverse.org/]
-[^22: https://www.fhsg.ch/fhs.nsf/files/IMS_Rettungswesen_sim911Bericht/$FILE/1%20-%20sim911%20-%20Ein%20Simulator%20fu%CC%88r%20das%20Rettungswesen.pdf]
+Meine Erfahrung bei der Entwicklung von `sim911`, einer Sammlung von R packages für die Analyse und Simulation von Rettungsdiensteinsatzdaten, welche ich 2014 begonnen habe und in der Zwischenzeit von einem 4-köpfigen Team am IMS-FHS weiterentwickelt wird, hat mich zusätzlich noch einen weiteren Punkt gelernt:  
 
-[@Wilson2014, Abschnitt "Plan for Mistake" und Einführung]
-[@Hunt2000, 189ff., 237ff.]
+5. **Insgesamt mehr Vertrauen in den (eigenen) Code**. Einige Teile von `sim911`[^22] sind viel besser getestet als andere. Das Vertrauen in diese Teile ist viel höher, als in die anderen. Wenn wir einen Bug in einem Projekt suchen ist dieses Vertrauen essentiell. Bei den schlecht getesteten Teilen bin ich mir einige Jahre nach dem Entwickeln selber nicht mehr sicher, ob sie jetzt mit anderen Situationen umgehen können oder nicht. Dies führt dazu, dass immer mal wieder Zeit damit verloren geht, das Vertrauen in (alten) Code zurückzugewinnen. Häufig ist der Bug dann doch nicht im schlecht getesteten Code. Wäre der Code gut getestet, wäre dies jedoch von Beginn weg klar.     
+
+
+[^21]: https://www.tidyverse.org/
+[^22]: https://www.fhsg.ch/fhs.nsf/files/IMS_Rettungswesen_sim911Bericht/$FILE/1%20-%20sim911%20-%20Ein%20Simulator%20fu%CC%88r%20das%20Rettungswesen.pdf  
+
 
 ## Testing Approaches in R  
 In R existieren viele Testing Approaches. [@YihuiXie], Autor von `knitr` und weiteren R packages im Bereich "Publishing", nennt in seinem Blogbeitrag "Testing R Packages" drei formale Approaches und schlägt mit seinem package `testit` noch einen vierten vor. Zusätzlich ist sicherlich noch das informelle Testen von R Code in der Konsole zu nennen, laut [@Wickham2011] eine häufige Praxis in der R Community.  
 
 Die 5 Testing Approaches sind demnach:  
 
-1. Testing in der Konsole  
-2. Testing mittels Textvergleich  
-3. `RUnit` und `svUnit`  
-4. `testit`  
-5. `testthat`    
+1. Testing in der Konsole
+2. Testing mittels Textvergleich
+3. `RUnit` und `svUnit`
+4. `testit`
+5. `testthat`
 
 
 ### Testing in der Konsole  
@@ -111,10 +111,11 @@ Dabei werden Testfälle unter `package/tests/` gespeichert. Mittels `R CMD BATCH
 Mit `RUnit` und `svUnit` existieren zwei packages, welche das XUnit Framework in R implementieren. `RUnit` und `svUnit` sind ähnlich aufgebaut und orientieren sich an `jUnit`. Beide packages konnten sich in der R Community jedoch nicht durchsetzen. [@Wickham2011] und [@YihuiXie] schreiben, dass der Einarbeitungs- und Einrichtungsaufwand wohl bei beiden Packages zu gross sei.
 
 ### Testing mittels `testit`  
-For me, I only want one thing for unit testing: I want the non-exported functions to be visible to me during testing; unit testing should have all “units” available, but R’s namespace has intentionally restricted the objects that are visible to the end users of a package, which is a Very Good Thing to end users. It is less convenient to the package author, since he/she will have to use the triple colon syntax such as foo:::hidden_fun() when testing the function hidden_fun().
+`testit` ist ein kleines Paket, welches ebenfalls automatisiertes Testen ermöglicht, jedoch auf ein absolutes Minimum beschränkt ist. Die Absicht von `testit` ist einzig die, die nicht exportierten Funktionen während dem Testing zur Verfügung zu haben. Der Autor Yihui Xie schreibt dazu in [@YihuiXie]: 
 
-I did not like the first approach (text comparison), and I did not want to learn or remember the new vocabulary of RUnit or testthat. There is only one function for the testing purpose in this package: assert().
+> "For me, I only want one thing for unit testing: I want the non-exported functions to be visible to me during testing; unit testing should have all “units” available, but R’s namespace has intentionally restricted the objects that are visible to the end users of a package, which is a Very Good Thing to end users. It is less convenient to the package author, since he/she will have to use the triple colon syntax such as foo:::hidden_fun() when testing the function hidden_fun().
 
+Weiter schreibt er, dass er den Ansatz des Textvergleichs nicht mag und er kein neues Vokablular lernen wollte, wie es die formaleren Frameworks wie `testthat` und `RUnit` erfordern. Das gesamte Testen im `testit` Packgage geschieht dann auch mit einer einzigen Funktion `assert()`. Das sehr einfache `testit` Package bedeutet wohl (noch) weniger Aufwand, als das Testen mit dem `testthat()` Package. Das `testthat` Package stellt jedoch sehr viele nützliche Funktionalität zur Verfügung und wir wollen uns im folgenden daher vertieft mit dem `testthat` Package beschäftigen.
 
 
 ### Testing mittels `testthat`  
@@ -123,7 +124,7 @@ I did not like the first approach (text comparison), and I did not want to learn
 `testthat` hat sich in den letzten Jahren als de-facto Standard für das automatisierte Unit-testing in R etabliert.[^24] Im Folgenden wollen wir uns daher vertiefter mit `testthat` auseinandersetzen.
 
 
-tests are expressed as expect_something() like a natural human language
+Tests werden im `testthat` Package mit der Syntax `expect_something()` beschrieben. Diese Art der Erwartungsbeschreibung ist an die natürliche menschliche Sprache angelehnt und erlaubt es sehr einfach Erwartungen zu formulieren, welche gut lesbar und dadurch auch verständlich sind durch die Tester.
 
 
 [^23]: Laut https://www.rdocumentation.org ist Hadley Wickham der Topautor überhaupt. Seine packages werden durch die Community am meisten genutzt.
@@ -131,20 +132,21 @@ tests are expressed as expect_something() like a natural human language
 
 
 # Testing mit dem Package `testthat`  
-[@Wickham2015], [@Wickham2011]
-
+Die folgenden Erläuterungen zum `testthat` Package basieren im Wesentlichen auf den beiden wichtigsten Primärquellen des Autors Hadley Wickham selber. Dies ist ein Paper, welches Hadley Wickham beim Erscheinen von `testthat` geschrieben hat [@Wickham2011] und das Buch "R Packages", in welchem Hadley Wickham den Entwicklungsprozess von R Packages detailliert beschreibt und dabei auch auf das Testing mit `testthat` eingeht. [@Wickham2015]
 
 ## Test Workflow   
 Die Integration von `testthat` in ein bestehendes Package ist enorm einfach. Die Funktion `devtools::use_testthat` aus dem `devtools`[^31] Package erstellt die nötigen Ordner und Files. Dies sind:
 
-1. Ein Ordner `tests/testthat` im Verzeichnis des aktuellen Packages.  
-2. Ein File `tests/testthat.R`, welches alle Tests ausführt, wenn `R CMD check` aufgerufen wird. Dies ist wichtig für das Deployment eines Packages auf CRAN.  
+[^31]: https://cran.r-project.org/web/packages/devtools/devtools.pdf
+
+1. Ein Ordner `tests/testthat` im Verzeichnis des aktuellen Packages.
+1. Ein File `tests/testthat.R`, welches alle Tests ausführt, wenn `R CMD check` aufgerufen wird. Dies ist wichtig für das Deployment eines Packages auf CRAN.
 
 Auch der weitere Workflow ist erdenklich einfach:  
 
-1. Änderungen an Code oder Tests vornehmen.  
-2. Das Package testen mit `devtools::test()` oder Ctrl/Cmd-Shift-T.  
-3. Schritte 1 und 2 wiederholen, bis das Package fehlerfrei ist.  
+1. Änderungen an Code oder Tests vornehmen.
+2. Das Package testen mit `devtools::test()` oder Ctrl/Cmd-Shift-T.
+3. Schritte 1 und 2 wiederholen, bis das Package fehlerfrei ist.
 
 `testthat` erstellt während dem Testen automatisch einen Statusreport in der Konsole oder in RStudio.
 
@@ -207,10 +209,10 @@ Einzig `expect_equivalent()` gibt keinen Fehler zurück, da die Kolonnennamen in
 ### Vergleiche  
 `testthat` stellt 4 Funktionen zur Verfügung für Vergleichstests.
 
-* `expect_lt()`: Testet, ob ein Objekt strikt kleiner als ein Vergleichswert ist.  
-* `expect_lte()`: Testet, ob ein Objekt kleiner oder gleich einem Vergleichswert ist.  
-* `expect_gt()`: Testet, ob ein Objekt strikt grösser als ein Vergleichswert ist.  
-* `expect_gte()`: Testet, ob ein Objekt grösser oder gleich einem Vergleichswert ist.  
+* `expect_lt()`: Testet, ob ein Objekt strikt kleiner als ein Vergleichswert ist.
+* `expect_lte()`: Testet, ob ein Objekt kleiner oder gleich einem Vergleichswert ist.
+* `expect_gt()`: Testet, ob ein Objekt strikt grösser als ein Vergleichswert ist.
+* `expect_gte()`: Testet, ob ein Objekt grösser oder gleich einem Vergleichswert ist.
 
 
 
@@ -223,9 +225,10 @@ Die Expectations `expect_output()`, `expect_message()`, `expect_warning()` und `
 Das folgende Beispiel zeigt die Differenz zwischen `expect_match()` und `expect_output()`.
 
 ```{r, error = TRUE}
-test_that("Unterschied zwischen `exepct_match()` und `expect_output`")
-expect_match(print(2), "2")
-expect_output(print(2), "2")
+test_that("Unterschied zwischen `exepct_match()` und `expect_output`", {
+  expect_match(print(2), "2")
+  expect_output(print(2), "2")
+})
 ```
 
 Die Expectation `expect_match()` wirft im obigen Beispiel einen Fehler, da die Anweisung `print(2)` kein Stringt ist und demzufolge von `expect_match()` nicht verarbeitet werden kann. `expect_output()` hingegen wertet `print(2)` zuerst aus und vergleicht den Outputwert in der Konsole mit dem String "2", was übereinstimmt.
@@ -398,6 +401,7 @@ Ungeklärt ist nun noch *mit was* getestet werden soll. Meine eigene Arbeit hat 
 ## Tests skippen   
 Es gibt Situationen, in denen es sinnvoll sein kann einen Test zu überspringen, ihn zu skippen.  
 Dies kann verschiedene Gründe haben:  
+
 1. Ein Test greift auf eine externe API zu, welche momentan offline ist.
 1. Ein Test greift auf eine Datei zu, welche momentan nicht verfügbar ist. (Beispielsweise, weil sie auf einem Rechner eines anderen Netzwerks liegt)
 1. Tests greifen auf andere Systeme zu, welche momentan nicht zur Verfügung stehen.
@@ -429,8 +433,11 @@ test_that("foo api returns bar when given baz", {
 ```
 
 
-## Schreiben eigener Expectations  
-As you start to write more tests, you might notice duplication in your code. For example, the following code shows one test of the `floor_date()` function from `library(lubridate)`. There are seven expectations that check the results of rounding a date down to the nearest second, minute, hour, etc. There's a lot of duplication (which increases the chance of bugs), so we might want to extract common behaviour into a new function.
+## Schreiben eigener Expectations und andere Tricks  
+
+`testthat` kann um eigene Expectations erweitert werden. Dies ist dann interessant, wenn sich im Testing Code mehr und mehr Dupllikationen auftun. Das folgende Beispiel ist dem Buch "R Packages" [@Wickham2015] entnommen.
+
+Anhand eines Tests zur `floor_date()` des `lubridate`-Packages werden die Vorteile eigener Expectations aufgezeigt. Die Funktion `floor_date()` rundet ein Datum auf verschiedene Einheiten ab, von der Abrundung auf die letzte Sekunde bis zur Abrundung auf den Jahresbeginn.
 
 ```{r}
 library(lubridate)
@@ -454,7 +461,7 @@ test_that("floor_date works for different units", {
 })
 ```
 
-I'd start by defining a couple of helper functions to make each expectation more concise. That allows each test to fit on one line, so you can line up actual and expected values to make it easier to see the differences:
+Der Code ist schwierig zu überblicken, da jede Expectation mehr als eine Zeile umfasst. Die Definition zweier helper-Funktionen `floor_base` und `as_time` entfernen die Redundanz aus dem Code. Der Code wird übersichtlich. Der Test auf Gleichheit erfolgt jedoch noch immer mit der `expect_equal` Funktion. (Was nicht per se verwerflich ist..)
 
 ```{r}
 test_that("floor_date works for different units", {
@@ -472,7 +479,7 @@ test_that("floor_date works for different units", {
 })
 ```
 
-We could go a step further and create a custom expectation function:
+Man kann jedoch noch einen Schritt weitergehen und eine eigene Funktion `expect_floor_equal()` definieren, welche `expect_equal()` und `floor_base()` zusammenfasst.
 
 ```{r}
 base <- as.POSIXct("2009-08-03 12:01:59.23", tz = "UTC")
@@ -483,23 +490,30 @@ expect_floor_equal <- function(unit, time) {
 expect_floor_equal("year", "2009-01-01 00:00:00")
 ```
 
-However, if the expectation fails this doesn't give very informative output:
+Somit ist die erste eigene Expectation geschrieben. Diese Expectation gibt jedoch noch keine sinnvollen Fehlermeldungen zurück, was einen der grossen Vorteile des `testthat` Packages zunichte macht. Das folgende Beispiel zeigt dieses Problem:
 
 ```{r, error = TRUE, eval = FALSE}
-expect_floor_equal("year", "2008-01-01 00:00:00")
+test_that("Beispiel X", {
+  expect_floor_equal("year", "2008-01-01 00:00:00")
+})
 ```
 
-Instead you can use a little [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html) to produce something more informative. The key is to use `bquote()` and `eval()`. In the `bquote()` call below, note the use of `.(x)` - the contents of `()` will be inserted into the call.
+Mithilfe einer anderen Auswertungsart kann dieses Problem umgangen werden. [non-standard evaluation](http://adv-r.had.co.nz/Computing-on-the-language.html)
+
+Die Funktionen `bquote()` und `eval()` aus dem R base Package helfen das Problem zu umgehen.
 
 ```{r, error = TRUE, eval = FALSE}
 expect_floor_equal <- function(unit, time) {
   as_time <- function(x) as.POSIXct(x, tz = "UTC")
   eval(bquote(expect_equal(floor_date(base, .(unit)), as_time(.(time)))))
 }
-expect_floor_equal("year", "2008-01-01 00:00:00")
+
+test_that("Beispiel X", {
+  expect_floor_equal("year", "2008-01-01 00:00:00")
+})
 ```
 
-This sort of refactoring is often worthwhile because removing redundant code makes it easier to see what's changing. Readable tests give you more confidence that they're correct.
+Diese Art des Refactorings kann sehr hilfreich sein. Der Testing Code wird dadurch besser lesbar und auch besser kognitiv überprüfbar, was das Vertrauen in den Testing Code stärkt.
 
 ```{r}
 test_that("floor_date works for different units", {
