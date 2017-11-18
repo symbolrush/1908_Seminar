@@ -204,6 +204,16 @@ test_that("Gleichheitstests 2", {
 
 Einzig `expect_equivalent()` gibt keinen Fehler zurück, da die Kolonnennamen innerhalb des Dataframes wegen der Option `check.attributes = FALSE` nicht betrachtet werden.
 
+### Vergleiche  
+`testthat` stellt 4 Funktionen zur Verfügung für Vergleichstests.
+
+* `expect_lt()`: Testet, ob ein Objekt strikt kleiner als ein Vergleichswert ist.  
+* `expect_lte()`: Testet, ob ein Objekt kleiner oder gleich einem Vergleichswert ist.  
+* `expect_gt()`: Testet, ob ein Objekt strikt grösser als ein Vergleichswert ist.  
+* `expect_gte()`: Testet, ob ein Objekt grösser oder gleich einem Vergleichswert ist.  
+
+
+
 ### String-Matching  
 `expect_match()`, testet mithilfe der R base Funktion `grepl`, ob ein Objekt mit einer Regular-Expression matcht.  
 
@@ -220,7 +230,21 @@ expect_output(print(2), "2")
 
 Die Expectation `expect_match()` wirft im obigen Beispiel einen Fehler, da die Anweisung `print(2)` kein Stringt ist und demzufolge von `expect_match()` nicht verarbeitet werden kann. `expect_output()` hingegen wertet `print(2)` zuerst aus und vergleicht den Outputwert in der Konsole mit dem String "2", was übereinstimmt.
 
+`expect_message()`, `expect_warning()` und `expect_error` wiederum sind Spezialisierungen von `expect_output()` und testen, ob Resultate einer Anweisung eine Nachricht, Warnung oder einen Fehler werfen, und ob diese Nachricht, Warnung oder Fehler mit einer Regular-Expression matchen.
 
+### Vererbung  
+
+`testthat` stellt Expectations zur Verfügung zum Testen, ob ein Objekt von einer S3, S4 erbt oder einen R base type hat. 
+
+* `expect_is()`: Testet, ob ein Objekt von einer spezifizierten Klasse erbt. Nutzt die R base Funktion `class()`
+* `expect_s3_class()`: Testet, ob ein Objekt von einer spezifierten S3 Klasse erbt. Nutzt die R base Funktion `class()`
+* `expect_s4_class()`: Testet, ob ein Objekt von einer spezifierten S4 Klasse erbt. Nutzt die R base Funktion `class()`
+* `expect_type()`: Testet, ob ein Objekt ein R base Typ hat. Nutzt die R base Funktion `typeof()`.
+* `expect_null()`: ist ein Spezialfall und testet auf das Objekt `NULL`.  
+
+### Logische Aussagen  
+
+`expect_true()` und `expect_false()` erlauben das Testing logischer Aussagen.
 
 ## Tests  
 Jeder Test sollte erstens einen informativen Namen haben und zweitens eine einzige Funktionalität testen. Der informative Namen beschreibt dabei die Idee des Tests. [@Wickham2015] schlägt vor, dass der Name des Tests den Satz "Test that..." vervollständigt. Diese Konvention erhöht die Lesbarkeit und hilft die Idee des Tests auch in Zukunft zu verstehen. Die Namensgebung entlangt dem Pattern "Test that..." ist ebenfalls eine schöne Anwendung des Axioms "Write programs for people, not computers", wie es u.A. [@Wilson2014] erwähnen. Dass ein Test nur eine einzige Funktionalität testen soll ist ebenfalls einsichtig: so ist direkt klar, welche Funktion einen Fehler verursacht. Tests werden in `testthat` mithilfe der Funktion `test_that()` geschrieben. `test_that()` nimmt zwei Argumente, das Argument `desc` enthält den Namen des Tests und das Argument `code` die Testanweisungen in geschleiften Klammern. Das folgende Beispiel zeigt diese Teststruktur. Das Beispiel stammt aus der Dokumentation von `testthat`.[^32]
