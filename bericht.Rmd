@@ -30,6 +30,7 @@ abstract: |
 
 ```{r global_options, include=FALSE}
 knitr::opts_chunk$set(fig.pos = 'H')
+library(testthat)
 ```
 
 \newpage
@@ -161,22 +162,63 @@ Expectations sind die kleinste Einheit des Testens. Eine Expectation macht eine 
 1. Sie haben zwei Argumente, das erste Argument ist das Resultat der zu testenden Funktion, das zweite das erwartete Resultat.
 1. Eine Expectation wirft einen Fehler, wenn die beiden Resultate nicht übereinstimmen.
 
-Das `testthat` Package umfasst mittlerweile an die 30 Expectations. Die wichtigsten daraus werden im Folgenden einzeln vorgestellt.  
+Das `testthat` Package umfasst mittlerweile an die 30 Expectations. Die Expectations lassen sich, nach der in verschiedene Kategorien, auf was getestet wird, einteilen. Diese sind:
 
-> Eventuell umschreiben, anhand Dokumentation von testthat. Die Organisation dort ist: Test auf Gleichheit, Vergleichstests, etc...
-https://cran.r-project.org/web/packages/testthat/testthat.pdf
+1. Gleichheit
+1. Vergleiche
+1. String-Matching
+1. Output
+1. Vererbung
+1. Logische Aussagen
 
-### `expect_equal()` und `expect_identical()`  
-afdad
+### Gleichheit  
+Für den Test auf Gleichheit stellt `testthat` drei Funktionen zur Verfügung. Dies sind `expect_equal()`, `expect_identical()` und `expect_equivalent()`.
 
-### `expect_match()`  
+`expect_identical()` nutzt die R base Funktion `identical()` und testet, ob zwei Objekte exakt gleich sind.  
+`expect_equal()` und `expect_equivalent()` nutzen dagegen die R base Funktion `all.equal()`, welche innerhalb einer nummerischen Toleranz testet. Das folgende Beispiel verdeutlicht diesen Sachverhalt:
 
+```{r, error = TRUE}
+a <- 1
+b <- 1 + 1e-8
 
-### `expect_message()`, `expect_warning()` und `expect_error`  
+test_that("Gleichheitstests 1", {
+  expect_equal(a, b)
+  expect_identical(a, b)
+})
+```
 
-### `expect_is()`
+`expect_equal()` gibt keinen Fehler zurück, `expect_identical()` wirft einen Fehler.
 
-### Weitere Expectations  
+`expect_equivalent()` nutzt ebenfalls `all.equal()`, setzt aber zustäzlich die Option `check.attributes = FALSE`, wodurch Differenzen in den Attributen der verglichenen Objekte nicht betrachtet werden, sondern nur die konkrete Wertebelegung. Das folgende Beispiel verdeutlicht diesen Sachverhalt:
+
+```{r, error = TRUE}
+a <- data.frame(a = 1)
+b <- data.frame(b = 1 + 1e-8)
+
+test_that("Gleichheitstests 2", {
+  expect_equivalent(a, b)
+  expect_equal(a, b)
+  expect_identical(a, b)
+})
+```
+
+Einzig `expect_equivalent()` gibt keinen Fehler zurück, da die Kolonnennamen innerhalb des Dataframes wegen der Option `check.attributes = FALSE` nicht betrachtet werden.
+
+### String-Matching  
+`expect_match()`, testet mithilfe der R base Funktion `grepl`, ob ein Objekt mit einer Regular-Expression matcht.  
+
+### Output  
+Die Expectations `expect_output()`, `expect_message()`, `expect_warning()` und `expect_error` sind Spezialisierungen von `expect_match()` und und vergleichen den Output eines Befehls mit einer Regular-Expression.
+
+Das folgende Beispiel zeigt die Differenz zwischen `expect_match()` und `expect_output()`.
+
+```{r, error = TRUE}
+test_that("Unterschied zwischen `exepct_match()` und `expect_output`")
+expect_match(print(2), "2")
+expect_output(print(2), "2")
+```
+
+Die Expectation `expect_match()` wirft im obigen Beispiel einen Fehler, da die Anweisung `print(2)` kein Stringt ist und demzufolge von `expect_match()` nicht verarbeitet werden kann. `expect_output()` hingegen wertet `print(2)` zuerst aus und vergleicht den Outputwert in der Konsole mit dem String "2", was übereinstimmt.
 
 
 
