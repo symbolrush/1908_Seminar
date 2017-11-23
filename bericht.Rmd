@@ -25,7 +25,7 @@ bibliography: bibliography.bib
 preamble: |
   % Any extra latex you need in the preamble
 abstract: |
-  Dieser Seminarbeitrag stellt das `testthat` Package für automatisiertes Testen von R packages vor. Einleitend wird eine kurze Einführung in R gegeben und einige grundlegende Gedanken zum Testing allgemein und spezifisch zum Testing im Scientific Computing vorgestellt. Einige Gedanken zur Erweiterung von `testthat` zur Integration weiterer Konzepte des Testings in R runden den Hauptteil ab.
+  Dieser Seminarbeitrag stellt das `testthat` Package für automatisiertes Testen von R packages vor. Einleitend wird eine kurze Einführung in R gegeben (Kapitel 1) und einige grundlegende Aspekte des Testing allgemein und im Kontext der Programmiersprache R vorgestellt (Kapitel 3). Im Hauptteil (Kapitel 3) wird das `testthat` Package und die Arbeit damit beschrieben. Mögliche Erweiterungen zur Integration weiterer Konzepte des Testings (Kapitel 4) und eine Zusammenfassung und Bewertung (Kapitel 5) runden den Seminarbeitrag ab.
 ---
 
 ```{r global_options, include=FALSE}
@@ -64,32 +64,35 @@ Nützlich für Scientific Computing und Data Sciences. [@Peng2014, Introduction]
 
 ## Warum Testing?  
 Testing ist essenziell, denn jede Software wird getestet. [@Hunt2000] schreiben dazu in Ihrem Buch "The Pragmatic Programmer": "Test Your Software, or Your Users Will". Also lieber selber die Bugs finden, als von seinen Kunden (oder Kollegen) darauf hingewiesen werden.  
-Dennoch testen viele Programmierer nicht gerne. Testen wird als notwendiges Übel betrachtet, als Zusatzaufwand den es zu minimieren gilt. Häufig wird daher "nett" getestet: Kritische Stellen werden eher umschifft und nicht auf Herz und Nieren geprüft. [@Hunt2000, 237ff.]  
-Im Scientific Computing ist die Situation dabei eher noch schlechter als in der traditionellen Softwareentwicklung. Dies hat mehrere Gründe. [@Wilson2014] schreiben, dass Wissenschaftler zwar mehr und mehr Zeit mit der Entwicklung von Software verbringen, jedoch meistens kaum fundierte Kenntnisse in Softwareentwicklung haben. Dabei ist Software für die heutige Wissenschaft so wichtig wie Reagenzgläser und Teleskope. In der Folge wird von denselben Wissenschaftler, welche teure Messgeräte einsetzen und diese regelmässig kalibrieren schlecht getesteter Code für die Auswertung der Messdaten benutzt. Die Folge sind nicht selten falsche Ergebnisse. [@Wilson2014] geben eine ganze Reihe von Artikeln aus bekannten wissenschaftlichen Journals an, welche sich mit der Richtigstellung von falschen Untersuchungen aufgrund von Programmierfehlern beschäftigen. Testing ist also auch wichtig, wenn die Software welche getestet wird nicht von zahlenden Kunden genutzt wird.  
+Dennoch testen viele Programmierer nicht gerne. Testen wird als notwendiges Übel betrachtet, als Zusatzaufwand den es zu minimieren gilt. Häufig wird daher "behutsam" getestet: Kritische Stellen werden eher umschifft und nicht auf Herz und Nieren geprüft. [@Hunt2000, 237ff.]  
+Im Scientific Computing ist die Situation dabei eher noch schlechter als in der traditionellen Softwareentwicklung. Dies hat mehrere Gründe. [@Wilson2014] schreiben, dass Wissenschaftler zwar mehr und mehr Zeit mit der Entwicklung von Software verbringen, jedoch meistens kaum fundierte Kenntnisse in Softwareentwicklung haben. Dabei ist Software für die heutige Wissenschaft so wichtig wie Reagenzgläser und Teleskope. In der Folge wird von denselben Wissenschaftler, welche teure Messgeräte einsetzen und diese regelmässig kalibrieren, schlecht getesteter Code für die Auswertung der Messdaten benutzt. Die Folge sind nicht selten falsche Ergebnisse. [@Wilson2014] geben eine ganze Reihe von Artikeln aus bekannten wissenschaftlichen Journals an, welche sich mit der Richtigstellung von falschen Untersuchungen aufgrund von Programmierfehlern beschäftigen. Testing ist also auch wichtig, wenn die Software welche getestet wird nicht von zahlenden Kunden genutzt wird.  
 
 Tools, welche das (automatisierte) Testen unterstützen gibt es seit Jahren viele. Alleine in R gibt es mit `svUnit` und `rUnit` zwei Implementierungen des XUnit Frameworks.  
 Warum also braucht es mit `testthat` nochmals ein neues Framework?  
 
 [@Hunt2000] argumentieren in Ihrem Buch "The Pragmatic Programmer", dass Testing primär ein kulturelles Problem sei und weniger ein technisches. Die Kultur des Testens könne in ein Projekt jedoch eingebunden werden unabhängig von der Programmiersprache. [@Hunt2000, S.197]  
-Genau hier setzt `testthat` an. Der Entwickler von Testthat Hadley Wickham, Chief Scientist bei RStudio und Autor mehrerer Bücher und der wichtigsten R packages der letzten Jahre [^21], schreibt hierzu, dass Software Testing wichtig sei, aber, dass es viele nicht tun, weil es frustrierend und langweilig sei. [@Wickham2011]  `testthat` versucht dies zu ändern, indem es sich besonders einfach in den Workflow von R Programmierern einbinden lässt, einfach zu lernen ist und gut skaliert. Insbesondere der schnell mögliche Einstieg in `testthat` versucht genau die "Kultur des Testens" zu katalysieren.  
-Er argumentiert, dass automatisiertes Testen zwar etwas Zusatzaufwand bedeutet, sich jedoch in viererlei Hinsichten ausbezahlt [@Wickham2011 und @Wickham2015]:  
+Genau hier setzt `testthat` an. Hadley Wickham, der Entwickler von Testthat, Chief Scientist bei RStudio, Autor mehrerer Bücher und der einflussreichsten R packages der letzten Jahre [^21][^25] , schreibt hierzu, dass Software Testing wichtig sei, aber, dass es viele nicht tun, weil es frustrierend und langweilig sei. [@Wickham2011]  
+
+`testthat` versucht dies zu ändern, indem es sich besonders einfach in den Workflow von R Programmierern einbinden lässt, einfach zu lernen ist und gut skaliert. Insbesondere der schnell mögliche Einstieg in `testthat` versucht genau die "Kultur des Testens" zu katalysieren.  
+Er argumentiert, dass automatisiertes Testen zwar etwas Zusatzaufwand bedeutet, sich jedoch in viererlei Hinsichten ausbezahlt [@Wickham2011] und [@Wickham2015]:  
 
 1. **Weniger Bugs**. Das Schreiben von Tests führt dazu, dass das Verhalten (und damit die Erwartungen) der Software an zwei Orten beschrieben sind. Dabei testen die Tests den Code und umgekehrt. Dies führt zu Software mit weniger Bugs.
-2. **Bessere Code Struktur**. Gut geschriebener Code ist einfacher zu testen. Häufig führt eine Kultur des Testens auch dazu, dass der Code umgeschrieben wird, bis er besser testbar ist. Dasselbe Argument führen auch [@Hunt2000] ins Feld.
-3. **Besserer Wiedereinstieg in die Arbeit nach einer (längeren) Pause**. Wenn eine Codeing-Sitzung damit abgeschlossen wird einen Test für das nächste zu entwickelnde Feature zu schreiben ist bei der Wiederaufnahme der Arbeit sofort klar, welcher Test einen Fehler wirft und welche Methode demzufolge als nächstes entwickelt werden sollte.
+2. **Bessere Code Struktur**. Gut geschriebener Code ist einfacher zu testen. Häufig führt eine Kultur des Testens auch dazu, dass der Code umgeschrieben wird, bis er besser testbar ist. Dasselbe Argument nennen auch [@Hunt2000].
+3. **Besserer Wiedereinstieg in die Arbeit nach einer (längeren) Pause**. Wenn eine Codeing-Sitzung damit abgeschlossen wird, einen Test für das nächste zu entwickelnde Feature zu schreiben ist bei der Wiederaufnahme der Arbeit sofort klar, welcher Test einen Fehler wirft und welche Methode demzufolge als nächstes entwickelt werden sollte.
 4. **Mehr Vertrauen bei Änderungen am Code**. Wenn ein Entwickler weiss, dass jede Funktion gut getestet ist, lassen sich Änderungen mit viel besserem Gefühl umsetzen.
 
-Meine Erfahrung bei der Entwicklung von `sim911`, einer Sammlung von R packages für die Analyse und Simulation von Rettungsdiensteinsatzdaten, welche ich 2014 begonnen habe und in der Zwischenzeit von einem 4-köpfigen Team am IMS-FHS weiterentwickelt wird, hat mich zusätzlich noch einen weiteren Punkt gelernt:  
+Meine Erfahrung bei der Entwicklung von `sim911`[^22], einer Sammlung von R packages für die Analyse und Simulation von Rettungsdiensteinsatzdaten, welche ich 2014 begonnen habe und in der Zwischenzeit von einem 4-köpfigen Team am IMS-FHS weiterentwickelt wird, hat mich zusätzlich noch einen weiteren Punkt gelernt:  
 
-5. **Insgesamt mehr Vertrauen in den (eigenen) Code**. Einige Teile von `sim911`[^22] sind viel besser getestet als andere. Das Vertrauen in diese Teile ist viel höher, als in die anderen. Wenn wir einen Bug in einem Projekt suchen ist dieses Vertrauen essentiell. Bei den schlecht getesteten Teilen bin ich mir einige Jahre nach dem Entwickeln selber nicht mehr sicher, ob sie jetzt mit anderen Situationen umgehen können oder nicht. Dies führt dazu, dass immer mal wieder Zeit damit verloren geht, das Vertrauen in (alten) Code zurückzugewinnen. Häufig ist der Bug dann doch nicht im schlecht getesteten Code. Wäre der Code gut getestet, wäre dies jedoch von Beginn weg klar.     
+5. **Insgesamt mehr Vertrauen in den (eigenen) Code**. Einige Teile von `sim911` sind viel besser getestet als andere. Das Vertrauen in diese Teile ist viel höher, als in die anderen. Wenn wir einen Bug in einem Projekt suchen ist dieses Vertrauen essentiell. Bei den schlecht getesteten Teilen bin ich mir einige Jahre nach dem Entwickeln selber nicht mehr sicher, ob sie jetzt mit anderen Situationen umgehen können oder nicht. Dies führt dazu, dass immer mal wieder Zeit damit verloren geht, das Vertrauen in (alten) Code zurückzugewinnen. Diese Zeit und Arbeit könnte gespart werden, unabhängig davon, ob der Bug schlussendlich im schlecht getesteten (alten) Code oder im aktuell entwickelten Code steckt.     
 
 
 [^21]: https://www.tidyverse.org/
 [^22]: https://www.fhsg.ch/fhs.nsf/files/IMS_Rettungswesen_sim911Bericht/$FILE/1%20-%20sim911%20-%20Ein%20Simulator%20fu%CC%88r%20das%20Rettungswesen.pdf  
+[^25]: Laut https://www.rdocumentation.org/ ist Hadley Wickham der einflussreichste Autor von R packages. Gemessen wird der Einfluss an der Verbreitung der packages in der Community (über Downloads) und der Dependencies anderer packages auf die packages des Autors.
 
 
 ## Testing Approaches in R  
-In R existieren viele Testing Approaches. [@YihuiXie], Autor von `knitr` und weiteren R packages im Bereich "Publishing", nennt in seinem Blogbeitrag "Testing R Packages" drei formale Approaches und schlägt mit seinem package `testit` noch einen vierten vor. Zusätzlich ist sicherlich noch das informelle Testen von R Code in der Konsole zu nennen, laut [@Wickham2011] eine häufige Praxis in der R Community.  
+In R existieren viele Testing Approaches. Yihui Xie, Autor von `knitr` und weiteren R packages im Bereich "Publishing", nennt in seinem Blogbeitrag "Testing R Packages" [@YihuiXie] drei formale Approaches und schlägt mit seinem package `testit` noch einen vierten vor. Zusätzlich ist sicherlich noch das informelle Testen von R Code in der Konsole zu nennen, laut Hadley Wickham und auch aus eigener Erfahrung eine häufige Praxis in der R Community [@Wickham2011].  
 
 Die 5 Testing Approaches sind demnach:  
 
@@ -132,12 +135,12 @@ Tests werden im `testthat` Package mit der Syntax `expect_something()` beschrieb
 
 
 # Testing mit dem Package `testthat`  
-Die folgenden Erläuterungen zum `testthat` Package basieren im Wesentlichen auf den beiden wichtigsten Primärquellen des Autors Hadley Wickham selber. Dies ist ein Paper, welches Hadley Wickham beim Erscheinen von `testthat` geschrieben hat [@Wickham2011] und das Buch "R Packages", in welchem Hadley Wickham den Entwicklungsprozess von R Packages detailliert beschreibt und dabei auch auf das Testing mit `testthat` eingeht. [@Wickham2015]
+Die folgenden Erläuterungen zum `testthat` Package basieren im Wesentlichen auf den beiden wichtigsten Primärquellen des Autors Hadley Wickham selber. Diese sind erstens ein Paper, welches Hadley Wickham beim Erscheinen von `testthat` geschrieben hat [@Wickham2011] und zweitens das Buch "R Packages", in welchem er den Entwicklungsprozess von R Packages detailliert beschreibt und dabei auch auf das Testing mit `testthat` eingeht. [@Wickham2015]
 
 ## Test Workflow   
 Die Integration von `testthat` in ein bestehendes Package ist enorm einfach. Die Funktion `devtools::use_testthat` aus dem `devtools`[^31] Package erstellt die nötigen Ordner und Files. Dies sind:
 
-[^31]: https://cran.r-project.org/web/packages/devtools/devtools.pdf
+[^31]: Devtools ist ein package, welches Tools für die Entwicklung von R packages zur Verfügung stellt. Devtools wird im Kapitel 4 näher beschrieben. verschiedenehttps://cran.r-project.org/web/packages/devtools/devtools.pdf
 
 1. Ein Ordner `tests/testthat` im Verzeichnis des aktuellen Packages.
 1. Ein File `tests/testthat.R`, welches alle Tests ausführt, wenn `R CMD check` aufgerufen wird. Dies ist wichtig für das Deployment eines Packages auf CRAN.
