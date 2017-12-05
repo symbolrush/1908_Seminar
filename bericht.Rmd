@@ -600,7 +600,24 @@ Das R Package `covr`[^43][^44] stellt ein Werkzeug zur Verfügung um die Test Co
 
 \newpage
 
-# Zusammenfassung des Vorgetragenen und Bewertung der Ergebnisse
+# Zusammenfassung und Bewertung  
+Hadley Wickham schreibt in seinem Artikel "testthat: Get Started with Testing" [@Wickham2011]:
+
+> It's not that we don't test our code, it's that we don't store our tests so they can be re-run automatically.
+
+Dieses Zitat ist so etwas wie das "Leitmotiv" dieses Seminarbeitrags.  
+
+Die kurze Einleitung (Kapitel 1) zur Programmiersprache R zeigt auf, was R ist und in welchen Kontexten es primär genutzt wird. Die Eigenheit der hohen Interaktivität ermöglicht dieses extrem schnelle Arbeiten in der Konsole und eben auch das interaktive Testen in der Konsole. Hier wird klar, warum diese Praxis sich überhaupt verbreiten konnte.
+
+In Kapitel 2 wird aufgezeigt warum die Praxis der nicht gespeicherten interaktiven Tests auch im Bereich des Scientific Computing nicht eine gute Praxis sind und welche anderen Ansätze als `testthat` es gibt, um in R automatisiert zu testen. Es wird auch aufgezeigt, dass die "Kultur des Testens" enorm wichtig ist. Hier wird klar, warum es `testthat` besser gelingt als anderen Ansätzen, die Praxis der interaktiven Tests aufzubrechen.
+
+In Kapitel 3, dem Hauptteil der Arbeit, wird das Paket `testthat` und die Arbeit damit vorgestellt. Es zeigt auf, wie einfach die Integration von `testthat` in ein bestehendes Paket ist, wie Tests geschrieben und organisisert werden. Die Vorstellung einiger `expect_something` Funktionen mitsamt Beispielen erläutern das Konzept der natürlichsprachlich formulierten Erwartungen, welches Hadley Wickham in `testthat` implementiert hat. Hier wird auch einsichtig, warum Testing mit `testthat` nicht (viel) aufwändiger ist als die Eingangs erwähnte Praxis des interaktiven Konsolentests und warum sich der Zusatzaufwand definitiv lohnt.
+
+Kapitel 4 stellt einige Erweiterungen von `testthat` skizzenhaft vor. Dies sind die Pakete `devtools`, `asserthat` und `covr`. Alle Pakete werden als sinnvolle Erweiterungen betrachtet und können gut zusammen mit `testthat` verwendet werden.
+
+`testthat` hat sich in den letzten Jahren als der de-facto Standard für das automatisierte Testen in R etabliert. Dieser Status ist gerechtfertigt. `testthat` bietet viele nützliche Funktionen für die Formulierung von Tests und ist gut in RStudio integriert. Die vielfältigen, natürlichsprachlich formulierten `expect_something` Funktionen erlauben es Tests auf einfache Art zu schreiben. Die Integration in den Workflow ist derart einfach, dass kaum Zusatzaufwand besteht. `testthat` ist das vollständigste Unit-Testing Framework in R und wenn die explosionsartige Verbreiterung von `testthat` fortschreitet ist das von Hadley Wickham als verbreitete Praxis beschriebene interaktive Testen in der Konsole bald Schnee von gestern.
+
+`testthat` kann uneingeschränkt empfohlen werden für alle Programmierer und Wissenschaftler, welche Code in R schreiben.
 
 \newpage
 
