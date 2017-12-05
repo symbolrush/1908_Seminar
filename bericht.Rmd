@@ -40,23 +40,34 @@ library(testthat)
 
 
 ## Was ist R?  
-R ist eine Programmiersprache.[^11]  
-[siehe @Peng2014, Abschnitt 3.1 - 3.8]  
 
-..und [@Wickham2017, Abschnitt 1.3.2 und 1.4 - 1.6]
+R ist eine quelloffene Programmiersprache, entwickelt um die Arbeit an und mit Daten (Datenanalyse, Statistik, Grafikerstellung) zu vereinfachen. R ist auf Basis von S entstanden.
 
-### Getting help and learning more  
-[@Wickham2017, Abschnitt 1.6]
+Daher ist R gegenüber gängigen Programmiersprachen viel konsequenter auf die interaktive Arbeit mit Daten zugeschnitten, versucht aber gleichzeitig auch Eigenschaften gängiger Programmiersprachen beizubehalten. Diese zusätzliche Flexibilität ist ein Vorteil für die Arbeit an und mit Daten und hat auch dazu geführt, dass sich R zur führenden Programmiersprache für Statistikanwendungen entwickelt hat. 
 
+Zur Standarddistribution von R gehört eine Kommandozeilenumgebung mit einem Interpreter, welche ebenfalls R genannt wird. [@Wickham2017] und [@Peng2014]  
 
+R unterstützt viele Programmierparadigmen. John M. Chambers, Informatiker, Statistiker und Mitentwickler von S und R zeigt in seinem Artikel "Object-Oriented Programming, Functional Programming and R", wie die beiden Paradigmen Objektorientierte Programmierung (OOP) und Funktionale Programmierung (FP) zusammenspielen. [@Chambers2014]
 
-### RStudio  
-[@Wickham2017, Abschnitt 1.4.2]
+Er schreibt dazu:  
 
-## Warum R?  
-Nützlich für Scientific Computing und Data Sciences. [@Peng2014, Introduction]
+> "To understand computations in R, two slogans are helpful:
+>
+>   - Everything that exists is an object.
+>   - Everything that happens is a function call."
 
-[^11: https://www.r-project.org/]
+Diese Aussage vertieft er, indem er aufzeigt, welche Prinzipien von OOP und FP auf welche Art in R umgesetzt sind.[^12] Chambers nennt die Art des Zusammenspiels von OOP und FP Ideen *functional OOP*, Hadley Wickham nennt den Stil in seinem Buch "Advanced R" *generic-function OO*. [@Wickham2015a]
+
+In diesem Stil gehören Methoden nicht zu Klassen, sondern zu generischen Funktionen. Die generische Funktion sucht sich beim Aufruf, die zu den Klassen der Attributen passende Methode. [@Chambers2014]
+
+RStudio ist eine integrierte Entwicklungsumgebung (IDE), für die R Programmierung, welche die Arbeit mit R radikal vereinfacht und sich in den letzten Jahren zum de fakto Standard für die Bearbeitung von R Projekten entwickelt hat. [@Wickham2017]
+
+R ist im Bereich der Statistik und des Scientific Computing weit verbreitet und die Anzahl der aktiven Nutzer wächst rasant.[^13] Am Institut für Modellbildung und Simulation nutzen wir R für Datenanalyse und Simulation im Bereich des Rettungswesens. Unser Simulator für das Rettungswesen *sim911* ist komplett in R geschrieben.[^14]
+
+[^11]: https://www.r-project.org/  
+[^12]: Die Details zu erläutern würde dem Zweck dieses Seminarbeitrags nicht gerecht, wer weiterführende Informationen sucht, dem empfehle ich den Artikel von Chambers wärmstens.  
+[^13]: https://stackoverflow.blog/2017/10/10/impressive-growth-r/
+[^14]: https://www.fhsg.ch/fhs.nsf/files/IMS_Rettungswesen_sim911Bericht/$FILE/1%20-%20sim911%20-%20Ein%20Simulator%20fu%CC%88r%20das%20Rettungswesen.pdf  
 
 \newpage
 
