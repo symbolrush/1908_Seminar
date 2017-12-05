@@ -407,8 +407,6 @@ Ungeklärt ist nun noch *mit was* getestet werden soll. Meine eigene Arbeit hat 
 
 6. **Nutze echte und synthetische Daten.**
 
-
-
 [^33]: https://martinfowler.com/
 [^34]: http://www.extremeprogramming.org/rules/testfirst.html
 
@@ -506,7 +504,7 @@ expect_floor_equal("year", "2009-01-01 00:00:00")
 
 Somit ist die erste eigene Expectation geschrieben. Diese Expectation gibt jedoch noch keine sinnvollen Fehlermeldungen zurück, was einen der grossen Vorteile des `testthat` Packages zunichte macht. Das folgende Beispiel zeigt dieses Problem:
 
-```{r, error = TRUE, eval = FALSE}
+```{r, error = TRUE}
 test_that("Beispiel X", {
   expect_floor_equal("year", "2008-01-01 00:00:00")
 })
@@ -516,7 +514,7 @@ Mithilfe einer anderen Auswertungsart kann dieses Problem umgangen werden. [non-
 
 Die Funktionen `bquote()` und `eval()` aus dem R base Package helfen das Problem zu umgehen.
 
-```{r, error = TRUE, eval = FALSE}
+```{r, error = TRUE}
 expect_floor_equal <- function(unit, time) {
   as_time <- function(x) as.POSIXct(x, tz = "UTC")
   eval(bquote(expect_equal(floor_date(base, .(unit)), as_time(.(time)))))
@@ -559,7 +557,8 @@ Die folgenden Anhaltspunkte nennt [@Wickham2015]:
 
 
 ## `testthat` in Skripts nutzen {#testthat_in_skripts}  
-...
+
+`testthat` ist gedacht zum automatisierten Testen von R packages. Bei der täglichen Arbeit mit R gibt es jedoch Situationen, in welchen Codeteile nicht Teil eines Packages sind, sondern in losen Skripts verwaltet werden. Insbesondere beim "Experimentieren" ist dies nützlich. Mit einem kleinen Trick kann `testthat` auch in solchen Situationen genutzt werden, ad-hoc Tests in der Konsole können direkt im Skript mitgespeichert werden. Das Testing geschieht dann durch Sourcen des Skripts. Das folgende Beispielskript zeigt eine solche Anwendung:
 
 ```{r}
 library(testthat)
@@ -574,10 +573,7 @@ test_that("add works", {
 })
 ```
 
-
-
-
-
+Diese Art `testthat` zu nutzen wird in der Literatur nicht erwähnt, hat jedoch in meiner Erfahrung insbesondere in frühen Phasen der Entwicklung einen gewissen Wert.
 
 \newpage
 
@@ -585,14 +581,22 @@ test_that("add works", {
 `testthat` kann sinnvoll erweitert werden.  
 
 ## `devtools`  
+Das R Package `devtools`[^41] gehört zum Lieferumfang von RStudio und ist eine Sammlung von Werkzeugen zur Entwicklung von R packages. Devtools stellt beispielsweise die Methode `devtools::use_testthat` zur Verfügung, welche einem R Package automatisch die nötige Infrastruktur zur Nutzung von `testthat` zur Verfügung stellt. [@Wickham2015]
 
+[^41]: https://cran.r-project.org/web/packages/devtools/index.html
 
 ## `assertthat`  
-[@Wilson2014, Plan for mistake], 
+Die Nutzung von Assertions ist im Bereich des Scientific Programming weniger verbreitet als in der traditionellen Softwareentwicklung, dies obwohl Assertions eine einfache und effektive Variante sind, um Vor- und Nachbedingungen von Funktionen lokal zu überprüfen. [@Wilson2014] 
+
+Das R Package `assertthat`[^42] ist eine Erweiterung der R base Funktion `stopifnot` und erlaubt es Assertions auf elegante Weise zu formulieren. Indem es verschiedenste Assertions zur Verfügung stellt und die Fehlermeldungen aufbereitet, wird gegenüber `stopifnot` die Lesbarkeit des Programmcodes und allfälligen Fehlercodes stark verbessert.
+
+[^42]: https://cran.r-project.org/web/packages/assertthat/index.html
 
 ## `covr`  
-[@Hester2017]
+Das R Package `covr`[^43][^44] stellt ein Werkzeug zur Verfügung um die Test Coverage zu messen. Mit `covr` kann festgestellt werden, welcher Anteil des Codes durch mindestens einen Unit Test durchlaufen werden und stellt die Resultate sowohl in KPIs als auch in interaktiven Dokumenten dar. Mit `covr` kann schnell festgestellt werden, welche Codezeilen durch keinen Testfall aufgerufen werden. `covr` ist relativ neu und in keinem Artikel oder Buch erwähnt.
 
+[^43]: https://cran.r-project.org/web/packages/devtools/index.html  
+[^44]: https://cran.r-project.org/web/packages/covr/vignettes/how_it_works.html
 
 \newpage
 
