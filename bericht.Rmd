@@ -603,7 +603,7 @@ Das R Package `covr`[^43][^44] stellt ein Werkzeug zur Verfügung um die Test Co
 # Zusammenfassung und Bewertung  
 Hadley Wickham schreibt in seinem Artikel "testthat: Get Started with Testing" [@Wickham2011]:
 
-> It's not that we don't test our code, it's that we don't store our tests so they can be re-run automatically.
+> "It's not that we don't test our code, it's that we don't store our tests so they can be re-run automatically."
 
 Dieses Zitat ist so etwas wie das "Leitmotiv" dieses Seminarbeitrags.  
 
@@ -615,9 +615,11 @@ In Kapitel 3, dem Hauptteil der Arbeit, wird das Paket `testthat` und die Arbeit
 
 Kapitel 4 stellt einige Erweiterungen von `testthat` skizzenhaft vor. Dies sind die Pakete `devtools`, `asserthat` und `covr`. Alle Pakete werden als sinnvolle Erweiterungen betrachtet und können gut zusammen mit `testthat` verwendet werden.
 
-`testthat` hat sich in den letzten Jahren als der de-facto Standard für das automatisierte Testen in R etabliert. Dieser Status ist gerechtfertigt. `testthat` bietet viele nützliche Funktionen für die Formulierung von Tests und ist gut in RStudio integriert. Die vielfältigen, natürlichsprachlich formulierten `expect_something` Funktionen erlauben es Tests auf einfache Art zu schreiben. Die Integration in den Workflow ist derart einfach, dass kaum Zusatzaufwand besteht. `testthat` ist das vollständigste Unit-Testing Framework in R und wenn die explosionsartige Verbreiterung von `testthat` fortschreitet ist das von Hadley Wickham als verbreitete Praxis beschriebene interaktive Testen in der Konsole bald Schnee von gestern.
+`testthat` hat sich in den letzten Jahren als der de-facto Standard für das automatisierte Testen in R etabliert.[^51] Dieser Status ist gerechtfertigt. `testthat` bietet viele nützliche Funktionen für die Formulierung von Tests und ist gut in RStudio integriert. Die vielfältigen, natürlichsprachlich formulierten `expect_something` Funktionen erlauben es Tests auf einfache Art zu schreiben. Die Integration in den Workflow ist derart einfach, dass kaum Zusatzaufwand besteht. `testthat` ist das vollständigste Unit-Testing Framework in R und wenn die explosionsartige Verbreiterung von `testthat` fortschreitet ist das Zitat von Hadley Wickham bald überholt und das Testing mittels `testthat` für die R Community so selbstverständlich wie heute das interaktive Testing in der Konsole.
 
 `testthat` kann uneingeschränkt empfohlen werden für alle Programmierer und Wissenschaftler, welche Code in R schreiben.
+
+[^51]: Die Zunahme an packages mit formalen Tests ist quasi alleine auf testthat zurückzuführen: https://github.com/ rstudio/webinars/blob/master/28-covr/covr-Rstudio_webinar.pdf
 
 \newpage
 
