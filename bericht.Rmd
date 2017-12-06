@@ -674,8 +674,6 @@ Kapitel 4 stellt einige Erweiterungen von `testthat` skizzenhaft vor. Dies sind 
 
 \newpage
 
-\listoffigures
-
 # Literatur
 
 
