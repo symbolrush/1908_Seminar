@@ -25,7 +25,7 @@ bibliography: bibliography.bib
 preamble: |
   % Any extra latex you need in the preamble
 abstract: |
-  Dieser Seminarbeitrag stellt das `testthat` Package für automatisiertes Testen von $R$ packages vor. Einleitend wird eine kurze Einführung in $R$ gegeben (Kapitel 1) und einige grundlegende Aspekte des Testing allgemein und im Kontext der Programmiersprache $R$ vorgestellt (Kapitel 2). Im Hauptteil (Kapitel 3) wird das `testthat` Package und die Arbeit damit beschrieben. Mögliche Erweiterungen zur Integration weiterer Konzepte des Testings (Kapitel 4) und eine Zusammenfassung und Bewertung (Kapitel 5) runden den Seminarbeitrag ab.
+  Dieser Seminarbeitrag stellt das `testthat` Package für automatisiertes Testen in $R$ vor. Einleitend wird eine kurze Einführung in $R$ gegeben (Kapitel 1) und einige grundlegende Aspekte des Testing allgemein und im Kontext der Programmiersprache $R$ vorgestellt (Kapitel 2). Im Hauptteil (Kapitel 3) wird das `testthat` Package und die Arbeit damit beschrieben. Mögliche Erweiterungen zur Integration weiterer Konzepte des Testings (Kapitel 4) und eine Zusammenfassung und Bewertung (Kapitel 5) runden den Seminarbeitrag ab.
 ---
 
 ```{r global_options, include=FALSE}
@@ -70,7 +70,7 @@ Er schreibt dazu:
 
 Diese Aussage vertieft er, indem er aufzeigt, welche Prinzipien von OOP und FP auf welche Art in $R$ umgesetzt sind. Chambers nennt die Art des Zusammenspiels von OOP und FP Ideen *functional OOP*, Hadley Wickham nennt den Stil in seinem Buch "Advanced R" *generic-function OO*. [@Wickham2015a] 
 
-In diesem Stil gehören Methoden nicht zu Klassen, sondern zu generischen Funktionen. Die generische Funktion sucht sich beim Aufruf, die zu den Klassen der Attributen passende Methode[^12]. [@Chambers2014]
+In diesem Stil gehören Methoden nicht zu Klassen, sondern zu generischen Funktionen. Die generische Funktion sucht sich beim Aufruf, die zu den Klassen der Attributen passende Methode[^12]. [@Chambers2014],[@Wickham2015a]
 
 $R$ ist im Bereich der Statistik und des Scientific Computing weit verbreitet und die Anzahl der aktiven Nutzer wächst rasant.[^13] Am Institut für Modellbildung und Simulation nutzen wir $R$ für Datenanalyse und Simulation im Bereich des Rettungswesens. Unser Simulator für das Rettungswesen *sim911* ist komplett in $R$ geschrieben.[^14]
 
@@ -94,18 +94,18 @@ Testing ist essenziell, denn jede Software wird getestet. [@Hunt2000] schreiben 
 
 Also lieber selber die Bugs finden, als von seinen Kunden (oder Kollegen) darauf hingewiesen werden.  
 Dennoch testen viele Programmierer nicht gerne. Testen wird als notwendiges Übel betrachtet, als Zusatzaufwand den es zu minimieren gilt. Häufig wird daher "behutsam" getestet: Kritische Stellen werden eher umschifft und nicht auf Herz und Nieren geprüft. [@Hunt2000]  
-Im Scientific Computing ist die Situation dabei eher noch schlechter als in der traditionellen Softwareentwicklung. Dies hat mehrere Gründe. Im Artikel "Best Practices for Scientific Programming" [@Wilson2014] wird dargestellt, dass Wissenschaftler zwar mehr und mehr Zeit mit der Entwicklung von Software verbringen, jedoch meistens kaum fundierte Kenntnisse in Softwareentwicklung haben. Dabei sei Software für die heutige Wissenschaft so wichtig wie Reagenzgläser und Teleskope. In der Folge wird von denselben Wissenschaftlern, welche teure Messgeräte einsetzen und diese regelmässig kalibrieren, schlecht getesteter Code für die Auswertung der Messdaten benutzt. Die Folge sind nicht selten falsche Ergebnisse. G. Wilson et al. geben in ihrem Artikel eine ganze Reihe von Artikeln aus bekannten wissenschaftlichen Journals an, welche sich mit der Richtigstellung von falschen Untersuchungen aufgrund von Programmierfehlern beschäftigen. Testing ist also auch im Umfeld des "Scientific Computing" essenziell.
+Im Scientific Computing ist die Situation dabei eher noch schlechter als in der traditionellen Softwareentwicklung. Dies hat mehrere Gründe. Im Artikel "Best Practices for Scientific Programming" [@Wilson2014] wird dargestellt, dass Wissenschaftler zwar mehr und mehr Zeit mit der Entwicklung von Software verbringen, jedoch meistens kaum fundierte Kenntnisse in Softwareentwicklung haben. Dabei sei Software für die heutige Wissenschaft so wichtig wie Reagenzgläser und Teleskope. In der Folge wird von denselben Wissenschaftlern, welche teure Messgeräte einsetzen und diese regelmässig kalibrieren, schlecht getesteter Code für die Auswertung der Messdaten benutzt. Die Folge davon sind nicht selten falsche Ergebnisse. G. Wilson et al. geben in ihrem Artikel eine ganze Reihe von Artikeln aus bekannten wissenschaftlichen Journals an, welche sich mit der Richtigstellung von falschen Untersuchungen aufgrund von Programmierfehlern beschäftigen. Testing ist also auch im Umfeld des "Scientific Computing" essenziell.
 
-Tools, welche das (automatisierte) Testen unterstützen gibt es seit Jahren viele. Alleine in $R$ gibt es mit `svUnit` und `rUnit` seit Jahren zwei Implementierungen des XUnit Frameworks.  
+Tools, welche das (automatisierte) Testen unterstützen gibt es seit Jahren viele. Alleine in $R$ gibt es mit `svUnit` und `rUnit` seit über 10 Jahren zwei Implementierungen des XUnit Frameworks.  
 Warum also braucht es mit `testthat` nochmals ein neues Framework?  
 
-In Ihrem Buch "The Pragmatic Programmer" argumentieren Andrew Hunt und David Thomas, dass Testing primär ein kulturelles Problem sei und weniger ein technisches. [@Hunt2000] Das ist einsichtig. Aus technischer Sicht sind Unit Tests einfach Code, welcher den zu testenden Code nutzt und die Resultate mit erwarteten Resultaten vergleicht. Solcher Code kann offensichtlich mit jeder Programmiersprache geschrieben werden. Im Prinzip ist hierzu auch kein formales Testing Framework notwendig. Hunt und Thomas schreiben denn auch weiter, dass die Kultur des Testens in jedes Projekt, unabhängig von der Programmiersprache, eingebunden werden kann.
+In Ihrem Buch "The Pragmatic Programmer" argumentieren Andrew Hunt und David Thomas, dass Testing primär ein kulturelles Problem sei und weniger ein technisches. [@Hunt2000] Das ist einsichtig. Aus technischer Sicht sind Unit Tests einfach Code, welcher den zu testenden Code aufruft und die Rückgabewerte mit erwarteten Resultaten vergleicht. Solcher Code kann offensichtlich mit jeder Programmiersprache geschrieben werden. Im Prinzip ist hierzu auch kein formales Testing Framework notwendig. Hunt und Thomas schreiben denn auch weiter, dass die Kultur des Testens in jedem Projekt, unabhängig von der Programmiersprache, eingebunden werden kann.
 
 `testthat` setzt genau bei dieser "Kultur des Testens" an und wirbt mit dem Spruch: 
 
 > "An $R$ package to make testing fun." 
 
-Hadley Wickham, der Entwickler von Testthat ist Chief Scientist bei RStudio, ausserordentlicher Professor an der Stanford University, der University of Auckland und der Rice University, Autor mehrerer Bücher und der einflussreichsten $R$ packages der letzten Jahre [^21]^,^[^25]. 
+Hadley Wickham, der Entwickler von Testthat ist Chief Scientist bei RStudio, ausserordentlicher Professor an der Stanford University, der University of Auckland und der Rice University, Autor mehrerer Bücher und der einflussreichsten $R$ Packages der letzten Jahre [^21]^,^[^25]. 
 
 In seinem Artikel "testthat: Get started with Testing" [@Wickham2011] schreibt er zur Kultur des Testens
 
@@ -118,17 +118,17 @@ Er argumentiert, dass automatisiertes Testen zwar etwas Zusatzaufwand bedeutet, 
 
 1. **Weniger Bugs**. Das Schreiben von Tests führt dazu, dass das Verhalten (und damit die Erwartungen) der Software an zwei Orten beschrieben sind. Dabei testen die Tests den Code und umgekehrt. Dies führt zu Software mit weniger Bugs.
 2. **Bessere Code Struktur**. Gut geschriebener Code ist einfacher testbar. Häufig führt eine Kultur des Testens auch dazu, dass der Code umgeschrieben wird, bis er besser testbar ist. Dasselbe Argument nennen auch Andrew Hunt und David Thomas [@Hunt2000].
-3. **Besserer Wiedereinstieg in die Arbeit nach einer (längeren) Pause**. Wenn eine Codeing-Sitzung damit abgeschlossen wird, einen Test für das nächste zu entwickelnde Feature zu schreiben, ist bei der Wiederaufnahme der Arbeit sofort klar, welcher Test einen Fehler wirft und welche Methode demzufolge als Nächstes entwickelt werden sollte.
+3. **Besserer Wiedereinstieg in die Arbeit nach einer (längeren) Pause**. Wenn die Entwicklungstätigkeit damit abgeschlossen wird, einen Test für das nächste zu entwickelnde Feature zu schreiben, ist bei der Wiederaufnahme der Arbeit sofort klar, welcher Test einen Fehler wirft und welche Methode demzufolge als Nächstes entwickelt werden sollte.
 4. **Mehr Vertrauen bei Änderungen am Code**. Wenn ein Entwickler weiss, dass jede Funktion gut getestet ist, lassen sich Änderungen mit viel besserem Gefühl umsetzen.
 
 Meine Erfahrung bei der Entwicklung von `sim911`[^22], einer Sammlung von $R$ packages für die Analyse und Simulation von Rettungsdiensteinsatzdaten, welche ich 2014 begonnen habe und in der Zwischenzeit von einem 4-köpfigen Team am IMS-FHS weiterentwickelt wird, hat mich zusätzlich noch einen weiteren Punkt gelernt:  
 
-5. **Insgesamt mehr Vertrauen in den (eigenen) Code**. Einige Teile von `sim911` sind viel besser getestet als andere. Das Vertrauen in diese Teile ist viel höher, als in die anderen. Wenn wir einen Bug in einem Projekt suchen ist dieses Vertrauen essentiell. Bei den schlecht getesteten Teilen bin ich mir einige Jahre nach dem Entwickeln selber nicht mehr sicher, ob sie mit anderen Situationen umgehen können oder nicht. Dies führt dazu, dass immer mal wieder Zeit damit verloren geht, das Vertrauen in (alten) Code zurückzugewinnen. Diese Zeit und Arbeit könnte gespart werden, unabhängig davon, ob der Bug schlussendlich im schlecht getesteten (alten) Code oder im aktuell entwickelten Code steckt.     
+5. **Insgesamt mehr Vertrauen in den (eigenen) Code**. Einige Teile von `sim911` sind viel besser getestet als andere. Das Vertrauen in diese Teile ist viel höher, als in die anderen. Wenn wir einen Bug in einem Projekt suchen ist dieses Vertrauen essenziell. Bei den schlecht getesteten Teilen bin ich mir einige Jahre nach dem Entwickeln selber nicht mehr sicher, ob sie mit anderen Situationen umgehen können oder nicht. Dies führt dazu, dass immer mal wieder Zeit damit verloren geht, das Vertrauen in (alten) Code zurückzugewinnen. Diese Zeit und Arbeit könnte gespart werden, unabhängig davon, ob der Bug schlussendlich im schlecht getesteten (alten) Code oder im aktuell entwickelten Code steckt.     
 
 
 [^21]: https://www.tidyverse.org/
 [^22]: https://www.fhsg.ch/fhs.nsf/files/IMS_Rettungswesen_sim911Bericht/$FILE/1%20-%20sim911%20-%20Ein%20Simulator%20fu%CC%88r%20das%20Rettungswesen.pdf  
-[^25]: Laut https://www.rdocumentation.org/ ist Hadley Wickham der einflussreichste Autor von $R$ packages. Gemessen wird der Einfluss an der Verbreitung der packages in der Community (über Downloads) und der Dependencies anderer packages auf die packages des Autors.
+[^25]: Laut https://www.rdocumentation.org/ ist Hadley Wickham der einflussreichste Autor von $R$ packages. Gemessen wird der Einfluss an der Verbreitung der packages in der Community (über Downloads) und der Dependencies anderer Packages auf die Packages des Autors.
 
 
 ## Testing Ansätze in R  
@@ -167,6 +167,24 @@ Weiter schreibt er, dass er den Ansatz des Textvergleichs nicht mag und er kein 
 Das gesamte Testen im `testit` Packgage geschieht dann auch mit einer einzigen Funktion `assert()`. 
 
 Damit ist `testit` das einfachste der zur Verfügung stehenden Frameworks für automatisiertes Unit Testing.
+
+Das folgende Minimalbeispiel gibt einen Eindruck darüber, wie das Testing mit `testit` funktioniert.
+
+```{r, error = TRUE}
+library(testit)
+
+add <- function(x, y) {
+  return(x + y)
+}
+
+assert("add works", 
+       add(2, 2) == 4,
+       class(add(2, 2)) == "numeric",
+       has_error(add("2", 2))
+)
+
+```
+
 
 ### Testing mittels `testthat`  
 `testthat` ist neuer als `RUnit` und `svUnit` und ebenfalls ein Testing Framework, welches den Unit Testing Ansatz umsetzt.
@@ -621,6 +639,7 @@ add <- function(x, y) {
 
 test_that("add works", {
   expect_equal(add(2, 2), 4)
+  expect_is(add(2, 2), "numeric")
   expect_error(add("2", 2))
 })
 ```
