@@ -157,6 +157,9 @@ Dabei werden Testfälle unter `package/tests/` gespeichert. Mittels `R CMD BATCH
 ### `RUnit` und `svUnit`   
 Mit `RUnit` und `svUnit` existieren zwei packages, welche das XUnit Framework in $R$ implementieren. `RUnit` und `svUnit` sind ähnlich aufgebaut und orientieren sich an `jUnit`. Beide packages konnten sich in der $R$ Community jedoch nicht durchsetzen. [@Wickham2011] und [@YihuiXie] argumentieren, dass der Einarbeitungs- und Einrichtungsaufwand wohl bei beiden Packages zu gross sei.
 
+https://4dpiecharts.com/2014/05/12/automatically-convert-runit-tests-to-testthat-tests/
+http://bioconductor.org/developers/how-to/unitTesting-guidelines/
+
 ### Testing mittels `testit`  
 `testit` ist ein kleines Paket, welches ebenfalls automatisiertes Testen ermöglicht, jedoch auf ein absolutes Minimum beschränkt ist. Die Absicht von `testit` ist einzig die, die nicht exportierten Funktionen während dem Testing zur Verfügung zu haben. Der Autor Yihui Xie schreibt dazu in [@YihuiXie]: 
 
