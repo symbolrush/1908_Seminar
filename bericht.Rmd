@@ -155,7 +155,56 @@ Testing mittels Textvergleich ist ein älteres Testverfahren, welches in der $R$
 Dabei werden Testfälle unter `package/tests/` gespeichert. Mittels `R CMD BATCH foo-test.R` werden die Tests ausgeführt. Die Outputs aus dem Test werden dadurch im File `foo-test.Rout.save` gespeichert. Das Testing geschieht danach indem das File `foo-test.Rout`, generiert mit `R CMD check`, mit dem vorab gespeicherten `foo-test.Rout.save` verglichen wird. Die Funktion `R CMD check` informiert den Tester automatisch, falls Differenzen bestehen. [@YihuiXie]
 
 ### `RUnit` und `svUnit`   
-Mit `RUnit` und `svUnit` existieren zwei packages, welche das XUnit Framework in $R$ implementieren. `RUnit` und `svUnit` sind ähnlich aufgebaut und orientieren sich an `jUnit`. Beide packages konnten sich in der $R$ Community jedoch nicht durchsetzen. [@Wickham2011] und [@YihuiXie] argumentieren, dass der Einarbeitungs- und Einrichtungsaufwand wohl bei beiden Packages zu gross sei.
+Mit `RUnit` und `svUnit` existieren zwei Packages, welche das XUnit Framework in $R$ implementieren. `RUnit` und `svUnit` sind ähnlich aufgebaut und orientieren sich an `jUnit`. Die Syntax beider Packages ist nahezu identisch zur `jUnit` Syntax. Das folgende Minimalbeispiel gibt einen Eindruck darüber, wie das Testing mit `RUnit` funktioniert. Auf ein `svUnit` Beispiel wird verzichtet.
+
+Das folgende Beispiel wird im Folgenden auch in den Frameworks `testit` und `testthat` aufgebaut. Daher an dieser Stelle eine kurze Erläuterung. Getestet wird eine kleine Funktion `add()`, welche zwei Zahlen addiert. Die Funktion wird im Beispiel jeweils gezeigt. Drei Testfälle testen, ob die Funktion `add()` das richtige Resultat einer Berechnung zurückgibt, ob die Klasse des Rückgabeobjektes `numeric` ist und, ob die Funktion einen Fehler wirft, wenn nicht beide Zahlen als `numeric` übergeben werden.
+
+```{r, error = TRUE}
+library(RUnit)
+
+add <- function(x, y) {
+  return(x + y)
+}
+
+checkEquals(add(2,2), 4)
+checkEquals(class(add(2,2)), "numeric")
+checkException(add("2", 2))
+```
+
+
+Beide packages konnten sich in der $R$ Community nicht breit durchsetzen. Die einzige Ausnahme davon sind die Packages des Bioconductor Projektes[^25], welche `RUnit` relativ häufig eingesetzt haben, seit einigen Jahren jedoch mehr und mehr nach `testthat` switchen. Es gibt mit `runittotestthat`[^26] sogar ein R Package, welches `RUnit` Tests automatisch in `testthat` Tests umwandelt. 
+
+Hadley Wickham und Yihui Xie argumentieren pauschal, dass der Einarbeitungs- und Einrichtungsaufwand wohl bei beiden Packages zu gross sei. [@Wickham2011] und [@YihuiXie] Dasselbe Argument nennt auch Bioconductor als eine der Schwächen des `RUnit` Frameworks.[^27] Richie Cotton nennt in seinem Blogbeitrag "Automatically convert RUnit tests to testthat tests", in welchem er sein Paket `runittotestthat` vorstellt noch drei weitere explizitere Gründe, warum er von `RUnit` zu `testthat` gewechselt hat. [@Cotton]
+
+Erstens ist die Integration in den Workflow besser. Wo mit `RUnit` ein ganzes File von Hilfscode nötig war, um ein Paket zu testen, genügt es in `testthat` die Funktion `test_package()` aufzurufen. Zweitens gibt es in `testthat` elegantere Mechanismen, um Warnungen zu testen. Das folgende Beispiel aus [@Cotton] zeigt einen Test auf eine Warnung in `RUnit` und `testthat`. Das Beispiel testet, ob eine `sqrt()` Funktion eine Warnung wirft, bei einem negativen Input.
+
+```{r}
+# Variante in RUnit
+test.sqrt.negative_numbers.throws_a_warning <- function()
+{
+  old_ops <- options(warn = 2)
+  on.exit(options(old_ops))
+  checkException(sqrt(-1))
+}
+
+# Das testthat Pendant
+test_that(
+  "sqrt throws a warning for negative number inputs",
+  {
+    expect_warning(sqrt(-1))
+  }
+)
+```
+
+Drittens nennt er die Cacheing Funktion von `testthat` als Vorteil, da so die Wartezeiten verkürzt werden.
+
+Ein weiterer wichtiger Nachteil der Pakete `RUnit` und `svUnit` ist zudem die Tatsache, dass beide Pakete seit einigen Jahren nicht mehr aktiv weiterentwickelt werden. 
+
+
+[^25]: http://bioconductor.org/
+[^26]: https://cran.r-project.org/web/packages/runittotestthat/index.html
+[^27]: http://bioconductor.org/developers/how-to/unitTesting-guidelines/#choosingTestFramework
+
 
 https://4dpiecharts.com/2014/05/12/automatically-convert-runit-tests-to-testthat-tests/
 http://bioconductor.org/developers/how-to/unitTesting-guidelines/
@@ -199,6 +248,23 @@ assert("add works",
 
 # Testing mit dem Package `testthat`  
 Die folgenden Erläuterungen zum `testthat` Package basieren im Wesentlichen auf den beiden wichtigsten Primärquellen des Autors Hadley Wickham selber. Diese sind erstens der Artikel "testthat: Get Started with Testing", welchen Hadley Wickham beim Erscheinen von `testthat` geschrieben hat [@Wickham2011] und zweitens das Buch "$R$ Packages", in welchem er den Entwicklungsprozess von $R$ Packages detailliert beschreibt und dabei auch auf das Testing mit `testthat` eingeht [@Wickham2015].
+
+Das folgende einleitende Beispiel zeigt dieselben Tests der `add()` Funktion, welche schon mit `RUnit` und `testit` gezeigt wurden.
+
+```{r}
+library(testthat)
+
+add <- function(x, y) {
+  return(x + y)
+}
+
+test_that("add() works fine.", {
+  expect_equal(add(2, 2), 4)
+  expect_is(add(2, 2), "numeric")
+  expect_error(add("2", 2))
+})
+```
+
 
 ## Test Workflow   
 Die Integration von `testthat` in ein bestehendes Package ist enorm einfach. Die Funktion `devtools::use_testthat()` aus dem `devtools`[^31] Package erstellt die nötigen Ordner und Files. Dies sind:
