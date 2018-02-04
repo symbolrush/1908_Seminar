@@ -1,0 +1,16 @@
+---
+output: pdf_document
+---
+
+This will not knit
+```{r, eval = FALSE, error = TRUE}
+library(testthat)
+expect_equal(2, 3)
+```
+
+```{r, error = TRUE}
+library(testthat)
+test_that("Test A", {
+  expect_equal(2, 3)
+})
+```

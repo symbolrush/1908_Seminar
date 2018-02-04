@@ -1,0 +1,31 @@
+---
+title: "Color error-message"
+header-includes: \usepackage[ngerman]{babel} \usepackage{graphicx} \usepackage{float} \pagenumbering{roman} \usepackage{xcolor} \usepackage{framed} \definecolor{shadecolor}{RGB}{240,240,240}
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+color_block = function(color) {
+  function(x, options) sprintf('\\color{%s}\\begin{verbatim}%s\\end{verbatim}',
+                               color, x)
+}
+
+bg_block = function() {
+  function(x, options) sprintf('\\begin{snugshade*}\\begin{verbatim}%s\\end{verbatim}\\end{snugshade*}', x)  
+}
+
+knitr::knit_hooks$set(error = color_block('red'))
+
+```
+
+
+```{r, error = TRUE}
+a <- 1
+b <- 2
+
+stopifnot(a == b)
+```
