@@ -102,8 +102,8 @@ Im Scientific Computing ist die Situation dabei eher noch schlechter als in der 
 Tools, welche das (automatisierte) Testen unterstützen, gibt es seit Jahren viele. Alleine in \textsf{R} gibt es mit `svUnit`[^213] und `rUnit`[^214] seit über 10 Jahren zwei Implementierungen des XUnit Frameworks.  
 Warum also braucht es mit `testthat` nochmals ein neues Framework?  
 
-[^213]: `RUnit` Vignette: https://cran.r-project.org/web/packages/RUnit/vignettes/RUnit.pdf
-[^214]: `svUnit` Vignette: https://cran.r-project.org/web/packages/svUnit/vignettes/svUnit.pdf
+[^214]: `RUnit` Vignette: https://cran.r-project.org/web/packages/RUnit/vignettes/RUnit.pdf
+[^213]: `svUnit` Vignette: https://cran.r-project.org/web/packages/svUnit/vignettes/svUnit.pdf
 
 In Ihrem Buch "The Pragmatic Programmer" argumentieren Andrew Hunt und David Thomas, dass Testing primär ein kulturelles Problem sei und weniger ein technisches. [@Hunt2000] Das ist einsichtig. Aus technischer Sicht sind Unit Tests einfach Codefragmente, welche den zu testenden Code aufrufen und die Rückgabewerte mit erwarteten Resultaten vergleichen. Solcher Code kann offensichtlich mit jeder Programmiersprache geschrieben werden. Im Prinzip ist hierzu auch kein formales Testing Framework notwendig. Hunt und Thomas schreiben denn auch weiter, dass die Kultur des Testens in jedem Projekt, unabhängig von der Programmiersprache, eingebunden werden kann.
 
@@ -262,7 +262,9 @@ Die Integration von `testthat` in ein bestehendes Package ist enorm einfach. Die
 [^31]: Devtools ist ein package, welches Tools für die Entwicklung von \textsf{R} packages zur Verfügung stellt. Devtools wird im Kapitel 4 näher beschrieben. verschiedenehttps://cran.r-project.org/web/packages/devtools/devtools.pdf
 
 1. Ein Ordner `tests/testthat` im Verzeichnis des aktuellen Packages. In diesem Ordner werden alle Testfälle abgelegt.
-1. Ein File `tests/testthat.R`, welches alle Tests ausführt, wenn `R CMD check` aufgerufen wird. Dies ist wichtig für das Deployment eines Packages auf CRAN.
+1. Ein File `tests/testthat.R`, welches alle Tests ausführt, wenn `R CMD check` aufgerufen wird. Dies ist wichtig für das Deployment eines Packages auf CRAN[^35].
+
+[^35]: CRAN, The Comprehensive R Archive Network, ist die wichtigste Plattform für \textsf{R} Code.
 
 Auch der weitere Workflow ist erdenklich einfach:  
 
