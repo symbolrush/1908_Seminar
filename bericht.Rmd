@@ -499,10 +499,12 @@ Datensets werden in \textsf{R} Packages im Ordner `data/` abgelegt. Auf in diese
 Häufig ist es notwendig, Testdaten beizuziehen, welche sich nicht auf wenigen Zeilen innerhalb des Testfalls generieren lassen. Um Redundanz in den zugrundeliegenden Daten zu vermeiden, ist es daher sinnvoll auch für die Testfälle auf diese bereits bestehenden Datensets zuzugreifen.
 
 ## Hilfsfunktionen  
-Wenn für die Ausführung von Testfällen Hilfsfunktionen notwendig sind, können diese innerhalb des `testthat`-Verzeichnisses innerhalb eigener Dateien abgelegt werden. Alle Dateien mit Dateinamen `helper-*.R` werden von `testthat` vor dem Durchführen der Tests geladen. Das heisst in einer solchen `helper-*.R` Datei abgelegte Hilfsfunktionen sind während dem gesamten Testdurchlauf verfügbar.
+Wenn für die Ausführung von Testfällen Hilfsfunktionen notwendig sind, können diese innerhalb des `testthat`-Verzeichnisses innerhalb eigener Dateien abgelegt werden. 
+
+Alle Dateien mit Dateinamen `helper-*.R` werden von `testthat` vor dem Durchführen der Tests geladen. Das heisst in einer solchen `helper-*.R` Datei abgelegte Hilfsfunktionen sind während dem gesamten Testdurchlauf verfügbar.
 
 ## Was testen?  
-Nachdem wir wissen, *wie* mit `testthat` getestet werden kann, widmen wir uns nun der viel wichtigeren und nicht so eindeutig beantwortbaren Frage *was* (mit `testthat`) getestet werden soll. Im Folgenden möchte ich mich dieser "philososphischen" Frage anhand verschiedener Zitate nähern und durch meine eigenen Einschätzungen abrunden.  
+Nachdem wir wissen, *wie* mit `testthat` getestet werden kann, widmen wir uns nun der viel wichtigeren und nicht so eindeutig beantwortbaren Frage, *was* (mit `testthat`) getestet werden soll. Im Folgenden möchte ich mich dieser "philososphischen" Frage anhand verschiedener Zitate nähern und durch meine eigenen Einschätzungen abrunden.  
 
 Starten möchte ich mit Martin Fowler[^33], einem der Gründerväter der agilen Softwareentwicklung:
 
@@ -538,7 +540,7 @@ Wilson et al. schreiben hierzu:
 
 > *"Tests check to see whether the code matches the researcher's expectations of its behavior, which depends on the researcher's understanding of the problem at hand."*
 
-Eine weitere Dimension der Frage *was* man testen sollte, wird in den folgenden beiden Zitaten angeschnitten.  
+Eine weitere Dimension der Frage, *was* man testen sollte, wird in den folgenden beiden Zitaten angeschnitten.  
 
 > *"Avoid testing simple code that you're confident will work."*
 
@@ -546,13 +548,13 @@ Dies schreibt Hadley Wickham in [@Wickham2015] und [@Hunt2000] schreiben:
 
 > *"Most developers hate testing. They tend to test gently, subconcsciously knowing where the code will break and avoiding the weak spots."*
 
-Die Menge der Testfälle garantiert eben noch keine gute Qualität der Testfälle. Dieses Problem können auch Test Coverage Tools nicht lösen, welche messen wie gross der Anteil am Code ist, welcher durch mindestens einen Testfall durchlaufen werden. Test Coverage Tools sind dennoch ein sehr nützlicher Anhaltspunkt, um "blinde" Flecken aufzudecken. [Abschnitt "4.3: `covr`""](#covr) stellt ein Test Coverage Tool für \textsf{R} vor, welches `testthat` sinnvoll ergänzen kann. 
+Die Menge der Testfälle garantiert eben noch keine gute Qualität der Testfälle. Dieses Problem können auch Test Coverage Tools nicht lösen, welche messen, wie gross der Anteil am Code ist, welcher durch mindestens einen Testfall durchlaufen werden. Test Coverage Tools sind dennoch ein sehr nützlicher Anhaltspunkt, um "blinde" Flecken aufzudecken. [Abschnitt "4.3: `covr`""](#covr) stellt ein Test Coverage Tool für \textsf{R} vor, welches `testthat` sinnvoll ergänzen kann. 
 
 Die genannten Zitate und Dimensionen der Frage nach dem *was* erlauben die Destillation der folgenden Guidelines beim Schreiben von Tests für die Nutzung von `testthat` im Rahmen des Scientific Computing:
 
 1. **Teste (als Wissenschaftler) deine inhaltliche Erwartungshaltung.** Was ist dein Modell der Funktion, welche du am Entwickeln bist? Gibt es (vereinfachende) Testfälle (z.B. obere- oder untere Schranken einer Berechnung), welche du angeben kannst? Gibt es Extremwerte, welche getestet werden können? Welche Anwendungsfälle hast du im Kopf und würdest du auf der Konsole interaktiv testen wollen? Schreibe diese als Tests nieder. Dieser Ansatz kann gut auch mit der "test-first" Philosophie kombiniert werden.[^34]
 1. **Turn bugs into testcases.** Sobald ein Bug auftaucht, schreibe einen Testfall, welcher den Bug abfängt. Korrigiere den Bug danach.
-1. **Sei Rücksichtslos.** Schreibe als nächstes den Test, welcher deiner Meinung nach die grösste Chance hat nicht erfolgreich durchzulaufen. Siehe hierzu auch [@Hunt2000]. Die Befolgung dieser Maxime stellt ein Stück weit auch sicher, dass nicht (zu) viele Tests geschrieben werden, welche kaum einen Impact auf die Güte der Tests haben.
+1. **Sei rücksichtslos.** Schreibe als nächstes den Test, welcher deiner Meinung nach die grösste Chance hat nicht erfolgreich durchzulaufen. Siehe hierzu auch [@Hunt2000]. Die Befolgung dieser Maxime stellt ein Stück weit auch sicher, dass nicht (zu) viele Tests geschrieben werden, welche kaum einen Impact auf die Güte der Tests haben.
 
 Aus einer Informatiksicht lassen sich zusätzlich die folgenden Guidelines nennen:
 
@@ -563,7 +565,7 @@ Ungeklärt ist nun noch *mit was* getestet werden soll. Meine eigene Arbeit hat 
 
 Die Arbeit mit synthetischen Daten ist sehr einfach möglich. Diese lassen sich meist sehr einfach genererien. Die erwarteten Resultate lassen sich dabei meist kognitiv nachvollziehen. Daher sind synthetische Daten enorm wertvoll, um die inhaltliche Erwartungshaltung zu testen und können sehr schnell formuliert werden. 
 
-Bei Tests mit echten Daten hingegen ist es viel schwieriger (oder nahezu unmöglich), das korrekte Resultat kognitiv nachzuvollziehen. Die Verifizierung von korrekten Testresultaten ist also enorm aufwändig. Dagegen haben reale Daten häufig andere Eigenschaften, als die synthetischen Testdaten. Die Nutzung von zusätzlichen Tests mit realen Daten erlauben es, zu schauen, ob eine Implementierung auch mit diesen Eigenschaften umgehen kann. Falls sich korrekte Resultate auf echten Daten nicht kognitiv bestimmen lassen, können diese dennoch wertvoll sein und z.B. gegenüber oberen- oder unteren Schranken getestet oder für Regressionstests verwendet werden. Ich formuliere daher noch die zusätzliche Guideline:
+Bei Tests mit echten Daten hingegen ist es viel schwieriger (oder nahezu unmöglich), das korrekte Resultat kognitiv nachzuvollziehen. Die Verifizierung von korrekten Testresultaten ist also enorm aufwändig. Dagegen haben reale Daten häufig andere Eigenschaften als die synthetischen Testdaten. Die Nutzung von zusätzlichen Tests mit realen Daten erlaubt es, zu schauen, ob eine Implementierung auch mit diesen Eigenschaften umgehen kann. Falls sich korrekte Resultate auf echten Daten nicht kognitiv bestimmen lassen, können diese dennoch wertvoll sein und z.B. gegenüber oberen- oder unteren Schranken getestet oder für Regressionstests verwendet werden. Ich formuliere daher noch die zusätzliche Guideline:
 
 6. **Nutze echte und synthetische Daten.**
 
@@ -593,7 +595,7 @@ test_that("...", {
 })
 ```
 
-Das Beispiel oben nutzt `skip()` auf statische Art. Um den Test wieder laufen zu lassen, muss `skip()` gelöscht, bzw. auskommentiert werden. Häufig ist es eine bessere Idee, `skip()` dynamisch zu nutzen. Die Bedingung, unter welcher geskippt werden soll, kann programmatisch abgefangen werden. Der Test wird, sobald beispielsweise eine API wieder zur Verfügung steht automatisch wieder ausgeführt. Das folgende Beispiel aus [@Wickham2015] zeigt diese Art der Nutzung.
+Das Beispiel oben nutzt `skip()` auf statische Art. Um den Test wieder laufen zu lassen, muss `skip()` gelöscht, bzw. auskommentiert werden. Häufig ist es eine bessere Idee, `skip()` dynamisch zu nutzen. Die Bedingung, unter welcher geskippt werden soll, kann programmatisch abgefangen werden. Der Test wird, sobald beispielsweise eine API wieder zur Verfügung steht, automatisch wieder ausgeführt. Das folgende Beispiel aus [@Wickham2015] zeigt diese Art der Nutzung.
 
 ```{r, eval = FALSE}
 check_api <- function() {
