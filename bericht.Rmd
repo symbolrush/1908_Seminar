@@ -56,8 +56,6 @@ library(lubridate)
 # Einführung in \textsf{R}  
 
 
-## Was ist \textsf{R}?  
-
 \textsf{R} ist eine quelloffene Programmiersprache, entwickelt um die Arbeit an und mit Daten (Datenanalyse, Statistik, Grafikerstellung) zu vereinfachen.[^11]^,^[^10]
 
 Daher ist \textsf{R} gegenüber gängigen Programmiersprachen viel konsequenter auf die interaktive Arbeit mit Daten zugeschnitten, versucht aber gleichzeitig auch Eigenschaften gängiger Programmiersprachen beizubehalten. Diese zusätzliche Flexibilität ist ein Vorteil für die Arbeit an und mit Daten und hat auch dazu geführt, dass sich \textsf{R} zu einer der führenden Programmiersprachen für Statistikanwendungen entwickelt hat.  
@@ -75,11 +73,11 @@ Er schreibt dazu:
 
 Diese Aussage vertieft er, indem er aufzeigt, welche Prinzipien von OOP und FP auf welche Art in \textsf{R} umgesetzt sind. Chambers nennt die Art des Zusammenspiels von OOP und FP Ideen *functional OOP*, Hadley Wickham nennt den Stil in seinem Buch "Advanced R" *generic-function OO*. [@Wickham2015a] 
 
-In diesem Stil gehören Methoden nicht zu Klassen, sondern zu generischen Funktionen. Die generische Funktion sucht sich beim Aufruf, die zu den Klassen der Attribute passende Methode.[^12] [@Chambers2014] und [@Wickham2015a]
+In diesem Stil gehören Methoden nicht zu Klassen, sondern zu generischen Funktionen. Die generische Funktion sucht sich beim Aufruf die zu den Klassen der Attribute passende Methode.[^12] [@Chambers2014] und [@Wickham2015a]
 
 \textsf{R} ist im Bereich der Statistik und des Scientific Computing weit verbreitet und die Anzahl der aktiven Nutzer wächst rasant.[^13] Am Institut für Modellbildung und Simulation nutzen wir \textsf{R} für Datenanalyse und Simulation im Bereich des Rettungswesens. Unser Simulator für das Rettungswesen *sim911* ist komplett in \textsf{R} geschrieben.[^14]
 
-\textsf{R} wird häufig zusammen mit \textsf{RStudio} genutzt. \textsf{RStudio}[^15] ist eine integrierte Entwicklungsumgebung (IDE), für die \textsf{R} Programmierung, welche die Arbeit mit \textsf{R} radikal vereinfacht und sich in den letzten Jahren zum De-facto-Standard für die Bearbeitung von \textsf{R} Projekten entwickelt hat. [@Wickham2017]
+\textsf{R} wird häufig zusammen mit \textsf{RStudio} genutzt. \textsf{RStudio}[^15] ist eine integrierte Entwicklungsumgebung (IDE) für die \textsf{R} Programmierung, welche die Arbeit mit \textsf{R} radikal vereinfacht und sich in den letzten Jahren zum De-facto-Standard für die Bearbeitung von \textsf{R} Projekten entwickelt hat. [@Wickham2017]
 
 [^10]: \textsf{R} ist auf Basis von \textsf{S} entstanden. \textsf{S} ist eine Programmiersprache, welche Ende 1970er Jahre für statistische Analysen in den Bell Laboratories durch John M. Chambers und andere entwickelt wurde. [@Peng2014]
 [^11]: https://www.r-project.org/  
@@ -93,18 +91,21 @@ In diesem Stil gehören Methoden nicht zu Klassen, sondern zu generischen Funkti
 # Testing in \textsf{R}  
 
 ## Warum Testing?  
-Testing ist essenziell, denn jede Software wird getestet. Andrew Hunt und David Thomas schreiben dazu in Ihrem Buch "The Pragmatic Programmer" [@Hunt2000]: 
+Testing ist essenziell, denn jede Software wird getestet. Andrew Hunt und David Thomas schreiben dazu in ihrem Buch "The Pragmatic Programmer" [@Hunt2000]: 
 
 > *"Test Your Software, or Your Users Will".*
 
 Also lieber selber die Bugs finden, als von seinen Kunden (oder Kollegen) darauf hingewiesen werden.  
-Dennoch testen viele Programmierer nicht gerne. Testen wird als notwendiges Übel betrachtet, als Zusatzaufwand den es zu minimieren gilt. Häufig wird daher "behutsam" getestet: Kritische Stellen werden eher umschifft, statt sie auf Herz und Nieren zu prüfen. [@Hunt2000]  
+Dennoch testen viele Programmierer nicht gerne. Testen wird als notwendiges Übel betrachtet, als Zusatzaufwand, den es zu minimieren gilt. Häufig wird daher "behutsam" getestet: Kritische Stellen werden eher umschifft, statt sie auf Herz und Nieren zu prüfen. [@Hunt2000]  
 Im Scientific Computing ist die Situation dabei eher noch schlechter als in der traditionellen Softwareentwicklung. Dies hat mehrere Gründe. Im Artikel "Best Practices for Scientific Programming" [@Wilson2014] wird dargestellt, dass Wissenschaftler zwar mehr und mehr Zeit mit der Entwicklung von Software verbringen, jedoch meistens kaum fundierte Kenntnisse in Softwareentwicklung haben. Dabei sei Software für die heutige Wissenschaft "so wichtig wie Reagenzgläser und Teleskope". In der Folge wird von denselben Wissenschaftlern, welche teure Messgeräte einsetzen und diese regelmässig kalibrieren, schlecht getesteter Code für die Auswertung der Messdaten benutzt. Die Folge davon sind nicht selten falsche Ergebnisse. Wilson et al. geben in ihrem Artikel eine ganze Reihe von Artikeln aus bekannten wissenschaftlichen Journals an, welche sich mit der Richtigstellung von falschen Untersuchungen aufgrund von Programmierfehlern beschäftigen. Testing ist also auch im Umfeld des "Scientific Computing" essenziell.
 
-Tools, welche das (automatisierte) Testen unterstützen gibt es seit Jahren viele. Alleine in \textsf{R} gibt es mit `svUnit` und `rUnit` seit über 10 Jahren zwei Implementierungen des XUnit Frameworks.  
+Tools, welche das (automatisierte) Testen unterstützen, gibt es seit Jahren viele. Alleine in \textsf{R} gibt es mit `svUnit`[^213] und `rUnit`[^214] seit über 10 Jahren zwei Implementierungen des XUnit Frameworks.  
 Warum also braucht es mit `testthat` nochmals ein neues Framework?  
 
-In Ihrem Buch "The Pragmatic Programmer" argumentieren Andrew Hunt und David Thomas, dass Testing primär ein kulturelles Problem sei und weniger ein technisches. [@Hunt2000] Das ist einsichtig. Aus technischer Sicht sind Unit Tests einfach Codefragmente, welchee den zu testenden Code aufrufen und die Rückgabewerte mit erwarteten Resultaten vergleichen. Solcher Code kann offensichtlich mit jeder Programmiersprache geschrieben werden. Im Prinzip ist hierzu auch kein formales Testing Framework notwendig. Hunt und Thomas schreiben denn auch weiter, dass die Kultur des Testens in jedem Projekt, unabhängig von der Programmiersprache, eingebunden werden kann.
+[^213]: `RUnit` Vignette: https://cran.r-project.org/web/packages/RUnit/vignettes/RUnit.pdf
+[^214]: `svUnit` Vignette: https://cran.r-project.org/web/packages/svUnit/vignettes/svUnit.pdf
+
+In Ihrem Buch "The Pragmatic Programmer" argumentieren Andrew Hunt und David Thomas, dass Testing primär ein kulturelles Problem sei und weniger ein technisches. [@Hunt2000] Das ist einsichtig. Aus technischer Sicht sind Unit Tests einfach Codefragmente, welche den zu testenden Code aufrufen und die Rückgabewerte mit erwarteten Resultaten vergleichen. Solcher Code kann offensichtlich mit jeder Programmiersprache geschrieben werden. Im Prinzip ist hierzu auch kein formales Testing Framework notwendig. Hunt und Thomas schreiben denn auch weiter, dass die Kultur des Testens in jedem Projekt, unabhängig von der Programmiersprache, eingebunden werden kann.
 
 `testthat` setzt genau bei dieser "Kultur des Testens" an und wirbt mit dem Spruch: 
 
@@ -128,7 +129,7 @@ Er argumentiert, dass automatisiertes Testen zwar etwas Zusatzaufwand bedeutet, 
 
 Meine Erfahrung bei der Entwicklung von `sim911`[^22], einer Sammlung von \textsf{R} packages für die Analyse und Simulation von Rettungsdiensteinsatzdaten, welche ich 2014 begonnen habe und in der Zwischenzeit von einem 4-köpfigen Team am IMS-FHS weiterentwickelt wird, hat mich zusätzlich noch einen weiteren Punkt gelernt:  
 
-5. **Insgesamt mehr Vertrauen in den (eigenen) Code**. Einige Teile von `sim911` sind viel besser getestet als andere. Das Vertrauen in diese Teile ist viel höher, als in die anderen. Wenn wir einen Bug in einem Projekt suchen ist dieses Vertrauen essenziell. Bei den schlecht getesteten Teilen bin ich mir einige Jahre nach dem Entwickeln selber nicht mehr sicher, ob sie mit anderen Situationen umgehen können oder nicht. Dies führt dazu, dass immer mal wieder Zeit damit verloren geht, das Vertrauen in (alten) Code zurückzugewinnen. Diese Zeit und Arbeit könnte gespart werden, unabhängig davon, ob der Bug schlussendlich im schlecht getesteten (alten) Code oder im aktuell entwickelten Code steckt.     
+5. **Insgesamt mehr Vertrauen in den (eigenen) Code**. Einige Teile von `sim911` sind viel besser getestet als andere. Das Vertrauen in diese Teile ist viel höher als in die anderen. Wenn wir einen Bug in einem Projekt suchen, ist dieses Vertrauen essenziell. Bei den schlecht getesteten Teilen bin ich mir einige Jahre nach dem Entwickeln selber nicht mehr sicher, ob sie mit anderen Situationen umgehen können oder nicht. Dies führt dazu, dass immer mal wieder Zeit damit verloren geht, das Vertrauen in (alten) Code zurückzugewinnen. Diese Zeit und Arbeit könnte gespart werden, unabhängig davon, ob der Bug schlussendlich im schlecht getesteten (alten) Code oder im aktuell entwickelten Code steckt.     
 
 
 [^21]: https://www.tidyverse.org/
@@ -137,11 +138,11 @@ Meine Erfahrung bei der Entwicklung von `sim911`[^22], einer Sammlung von \texts
 
 
 ## Testing Ansätze in \textsf{R}  
-In \textsf{R} existieren viele Testing Ansätze. Die relevante Literatur zum Thema unterscheidet sich nur geringfügig in den genannten Testing Ansätze. Durch Kombination der verschiedenen Artikel können 5 verschiedene Testing Ansätze eruiert werden.
+In \textsf{R} existieren viele Testing Ansätze. Die relevante Literatur zum Thema unterscheidet sich nur geringfügig in den genannten Testing Ansätze. Durch Kombination der verschiedenen Artikel können fünf verschiedene Testing Ansätze eruiert werden.
 
 Yihui Xie, Autor von `knitr` und weiteren \textsf{R} packages im Bereich "Publishing", nennt in seinem Blogbeitrag "Testing \textsf{R} Packages" [@YihuiXie] drei formale Ansätze und schlägt mit seinem package `testit` noch einen vierten vor. Zusätzlich ist sicherlich noch das informelle Testen von \textsf{R} Code in der Konsole zu nennen, laut Hadley Wickham und auch aus eigener Erfahrung eine häufige Praxis in der \textsf{R} Community. [@Wickham2011]
 
-Die 5 relevantesten Testing Ansätze sind demnach:  
+Die fünf relevantesten Testing Ansätze sind demnach:  
 
 1. Testing in der Konsole
 2. Testing mittels Textvergleich
@@ -166,8 +167,8 @@ Mit `RUnit` und `svUnit` existieren zwei Packages, welche das `XUnit` Framework 
 
 Getestet wird eine Funktion `add()`, welche zwei Zahlen addiert. Drei Testfälle testen, ob die Funktion `add()` 
 
-1. das richtige Resultat einer Berechnung zurückgibt, ob
-2. die Klasse des Rückgabeobjektes `numeric` ist und, ob
+1. das richtige Resultat einer Berechnung zurückgibt,
+2. die Klasse des Rückgabeobjektes `numeric` ist,
 3. die Funktion einen Fehler wirft, wenn nicht beide Zahlen als `numeric` übergeben werden.
 
 Das Beispiel wird später auch in den Frameworks `testit` und `testthat` gezeigt.
@@ -205,7 +206,7 @@ test_that("sqrt throws a warning for negative number inputs", {
 })
 ```
 
-Drittens nennt er die Cacheing Funktion von `testthat` als Vorteil, da so die Wartezeiten verkürzt werden.
+Drittens nennt er die Caching Funktion von `testthat` als Vorteil, da so die Wartezeiten verkürzt werden.
 
 Ein weiterer wichtiger Nachteil der Pakete `RUnit` und `svUnit` ist zudem die Tatsache, dass beide Pakete seit einigen Jahren nicht mehr aktiv weiterentwickelt werden.[^211] 
 
