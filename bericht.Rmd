@@ -416,7 +416,7 @@ Die Expectation `expect_match()` wirft im obigen Beispiel einen Fehler, da die A
 
 ### Test der Klassenhierarchie (Vererbung)
 
-`testthat` stellt Expectations zur Verfügung zum Testen, ob ein Objekt von einer S3 oder S4 Klasse erbt oder einen \textsf{R} base Typen hat.[^310] 
+`testthat` stellt Expectations zur Verfügung zum Testen, ob ein Objekt von einer S3 oder S4 Klasse erbt oder einen \textsf{R} base Typen hat.[^315] 
 
 * `expect_is()`: Testet, ob ein Objekt von einer spezifizierten Klasse erbt. Nutzt die \textsf{R} base Funktion `class()`
 * `expect_s3_class()`: Testet, ob ein Objekt von einer spezifierten S3 Klasse erbt. Nutzt die \textsf{R} base Funktion `class()`
@@ -424,7 +424,7 @@ Die Expectation `expect_match()` wirft im obigen Beispiel einen Fehler, da die A
 * `expect_type()`: Testet, ob ein Objekt einen \textsf{R} base Typen hat. Nutzt die \textsf{R} base Funktion `typeof()`.
 * `expect_null()`: ist ein Spezialfall und testet auf das Objekt `NULL`.  
 
-[^310]: \textsf{R} kennt verschiedene objektorientierte Stile. Da sich Objekte der verschiedenen Stile unterschiedlich verhalten bezüglich Nutzung und Vererbung ist es wichtig zu wissen, ob ein Objekt nach dem S3 Stil oder dem S4 Stil programmiert ist. Eine gute Einführung hierzu wird im Buch "Advanced R" [@Wickham2015a] gegeben.
+[^315]: \textsf{R} kennt verschiedene objektorientierte Stile. Da sich Objekte der verschiedenen Stile unterschiedlich verhalten bezüglich Nutzung und Vererbung ist es wichtig zu wissen, ob ein Objekt nach dem S3 Stil oder dem S4 Stil programmiert ist. Eine gute Einführung hierzu wird im Buch "Advanced R" [@Wickham2015a] gegeben.
 
 ### Test mittels logischer Aussagen
 
