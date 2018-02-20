@@ -264,7 +264,7 @@ Die Integration von `testthat` in ein bestehendes Package ist enorm einfach. Die
 1. Ein Ordner `tests/testthat` im Verzeichnis des aktuellen Packages. In diesem Ordner werden alle Testfälle abgelegt.
 1. Ein File `tests/testthat.R`, welches alle Tests ausführt, wenn `R CMD check` aufgerufen wird. Dies ist wichtig für das Deployment eines Packages auf CRAN[^35].
 
-[^35]: CRAN, The Comprehensive R Archive Network, ist die wichtigste Plattform für \textsf{R} Code.
+[^35]: CRAN, The Comprehensive R Archive Network, ist die wichtigste Plattform für \textsf{R} Code. https://cran.r-project.org/
 
 Auch der weitere Workflow ist erdenklich einfach:  
 
@@ -313,9 +313,11 @@ Das `testthat` Package umfasst mittlerweile an die 30 Expectations. Die Expectat
 1. Test von Output
 1. Test der Klassenhierarchie (Vererbung)
 1. Test mittels logischer Aussagen
+1. Test durch Vergleich mit älteren Resultaten
+1. Tests von Expectations
 
 ### Tests auf Gleichheit
-Für den Test auf Gleichheit stellt `testthat` drei Funktionen zur Verfügung. Dies sind `expect_equal()`, `expect_identical()` und `expect_equivalent()`.
+Für den Test auf Gleichheit stellt `testthat` fünf Funktionen zur Verfügung. Dies sind `expect_equal()`, `expect_identical()`, `expect_equivalent()`, `expect_setequal` und `expect_reference`.
 
 `expect_identical()` nutzt die \textsf{R} base Funktion `identical()` und testet, ob zwei Objekte exakt gleich sind.  
 `expect_equal()` und `expect_equivalent()` nutzen dagegen die \textsf{R} base Funktion `all.equal()`, welche innerhalb einer numerischen Toleranz testet. 
@@ -352,6 +354,24 @@ test_that("Gleichheitstests 2", {
 
 Obwohl `a` und `b` nun exakt dieselbe Wertebelegung haben, geben `expect_identical()` und `expect_equal()` wegen der unterschiedlichen (Spalten)-Namen "a" und "b" einen Fehler zurück.
 Einzig `expect_equivalent()` gibt keinen Fehler zurück, da die Namen wegen der Option `check.attributes = FALSE` nicht betrachtet werden.
+
+`expect_setequal` dient dazu zwei Mengen von Elementen darauf zu überprüfen, ob sie dieselben Elemente enthalten. Dabei wird die Reihenfolge und Duplikate nicht beachtet.
+
+Das folgende Beispiel verdeutlicht diesen Sachverhalt:
+
+```{r, error = TRUE}
+a <- c(1,2,2)
+b <- c(2,1)
+
+test_that("Gleichheitstests 3", {
+  expect_equal(a, b)
+  expect_setequal(a, b)
+})
+```
+
+`expect_equal` wirft einen Fehler, `expect_setequal` erkennt, dass es sich bei `a` und `b` um dieselben Mengen handelt.
+
+`expect_reference` testet, ob zwei Elemente auf dieselbe Speicherstelle referenzieren.
 
 ### Vergleichstests
 
@@ -396,24 +416,45 @@ Die Expectation `expect_match()` wirft im obigen Beispiel einen Fehler, da die A
 
 ### Test der Klassenhierarchie (Vererbung)
 
-`testthat` stellt Expectations zur Verfügung zum Testen, ob ein Objekt von einer S3 oder S4 Klasse erbt oder einen \textsf{R} base Typen hat. 
+`testthat` stellt Expectations zur Verfügung zum Testen, ob ein Objekt von einer S3 oder S4 Klasse erbt oder einen \textsf{R} base Typen hat.[^310] 
 
 * `expect_is()`: Testet, ob ein Objekt von einer spezifizierten Klasse erbt. Nutzt die \textsf{R} base Funktion `class()`
 * `expect_s3_class()`: Testet, ob ein Objekt von einer spezifierten S3 Klasse erbt. Nutzt die \textsf{R} base Funktion `class()`
 * `expect_s4_class()`: Testet, ob ein Objekt von einer spezifierten S4 Klasse erbt. Nutzt die \textsf{R} base Funktion `class()`
-* `expect_type()`: Testet, ob ein Objekt ein \textsf{R} base Typ hat. Nutzt die \textsf{R} base Funktion `typeof()`.
+* `expect_type()`: Testet, ob ein Objekt einen \textsf{R} base Typen hat. Nutzt die \textsf{R} base Funktion `typeof()`.
 * `expect_null()`: ist ein Spezialfall und testet auf das Objekt `NULL`.  
+
+[^310]: \textsf{R} kennt verschiedene objektorientierte Stile. Da sich Objekte der verschiedenen Stile unterschiedlich verhalten bezüglich Nutzung und Vererbung ist es wichtig zu wissen, ob ein Objekt nach dem S3 Stil oder dem S4 Stil programmiert ist. Eine gute Einführung hierzu wird im Buch "Advanced R" [@Wickham2015a] gegeben.
 
 ### Test mittels logischer Aussagen
 
 `expect_true()` und `expect_false()` erlauben das Testing logischer Aussagen.
+
+### Vergleich mit historischen Resultaten  
+
+`testthat` stellt Expectations zur Verfügung zum Testen, ob Resultate mit historischen Resultaten übereinstimmen. Dazu werden die letzten Ergebnisse gespeichert.  
+
+* `expect_known_output`: Testet, ob der Output einer Anweisung gegenüber dem letzten Aufruf nicht geändert hat.  
+* `expect_known_value`: Testet, ob das Resultat einer Anweisung gegenüber dem letzten Aufruf nicht geändert hat.  
+* `expect_known_hash`: Testet, ob das Resultat einer Methode gegenüber einer älteren Version, spezifiziert mit einem Git Hash[^311], nicht geändert hat.
+
+[^311]: Git ist ein Tool zur verteilten Versionsverwaltung von Source Code. https://git-scm.com/
+
+### Testen von Expectations  
+
+Zum Testen von Expectations bietet `testthat` ebenfalls verschiedene Methoden an.
+
+* `expect_success`: Erwartet, dass eine Expectation keinen Fehler wirft.  
+* `expect_failure`: Erwartet, dass eine Expectation einen Fehler wirft.
+* `show_failure`: Kann in Beispielen genutzt werden, um die erwartete Fehlermeldung anzuzeigen ohne einen Fehler zu werfen.  
+* `expect_known_failure`: Erwartet, dass eine Expectation denselben Fehler wirft, wie in einem früheren Aufruf.
 
 ## Tests  
 Die nächsthöhere Organisationsstruktur innerhalb `testthat` sind die Tests.
 
 Jeder Test sollte erstens einen informativen Namen haben und zweitens eine einzige Funktionalität testen.[@Wickham2015] 
 
-Der informative Namen beschreibt dabei die Idee des Tests. Hadley Wickham schlägt vor, dass der Name des Tests den Satz "Test that..." vervollständigt[@Wickham2015]. Diese Konvention erhöht die Lesbarkeit und hilft, die Idee des Tests auch in Zukunft zu verstehen. Die Namensgebung entlangt dem Pattern "Test that..." ist ebenfalls eine schöne Anwendung des Axioms "Write programs for people, not computers", wie es u.A. [@Wilson2014] erwähnen. 
+Der informative Namen beschreibt dabei die Idee des Tests. Hadley Wickham schlägt vor, dass der Name des Tests den Satz "Test that..." vervollständigt[@Wickham2015]. Diese Konvention erhöht die Lesbarkeit und hilft, die Idee des Tests auch in Zukunft zu verstehen. Die Namensgebung entlang dem Pattern "Test that..." ist ebenfalls eine schöne Anwendung des Axioms "Write programs for people, not computers", wie es u.A. [@Wilson2014] erwähnen. 
 
 Dass ein Test nur eine einzige Funktionalität testen soll, ist ebenfalls einsichtig: so ist direkt klar, welche Funktion einen Fehler verursacht. 
 
@@ -723,7 +764,7 @@ Die folgenden Anhaltspunkte nennt [@Wickham2015]:
 1. Tests werden immer in Englisch ausgeführt ($LANGUAGE=EN$) und sind $C$ sortiert ($LC\_COLLATE=C$). Dies minimiert Differenzen zwischen den Plattformen.
 1. CRAN Rechner können sich anders verhalten als lokale \textsf{R} Installationen. Beispielsweise können Laufzeiten stark variieren, da CRAN Maschinen stark ausgelastet sind. Auch Parallelisierungen können eventuell nicht funktionieren, da auf CRAN verschiedene Prozesse parallelisiert werden und dadurch für das Testing eines Packages möglicherweise nur ein Kern zur Verfügung steht. Auch die numerische Präzision kann zwischen verschiedenen Plattformen variieren. Daher sollte eher `expect_equal()` statt `expect_identical()` verwendet werden.
 
-[^212]: The Comprehensive R Archive Network https://cran.r-project.org/
+[^212]: CRAN, The Comprehensive R Archive Network, ist die wichtigste Plattform für \textsf{R} Code. https://cran.r-project.org/
 
 ## `testthat` in Skripts nutzen {#testthat_in_skripts}  
 
