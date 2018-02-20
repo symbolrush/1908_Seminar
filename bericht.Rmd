@@ -761,10 +761,12 @@ Sobald ein \textsf{R} package auf CRAN[^212] deployed werden soll, müssen an de
 Die folgenden Anhaltspunkte nennt [@Wickham2015]:  
 
 1. Tests müssen auf CRAN relativ schnell laufen. Zielwert ist weniger als eine Minute. Tests mit längerer Laufzeit können mit `skip_on_cran()` versehen werden. Damit werden Sie auf CRAN nicht ausgeführt.
-1. Tests werden immer in Englisch ausgeführt ($LANGUAGE=EN$) und sind $C$ sortiert ($LC\_COLLATE=C$). Dies minimiert Differenzen zwischen den Plattformen.
+1. Tests werden immer in Englisch ausgeführt ($LANGUAGE=EN$) und sind $C$ sortiert ($LC\_COLLATE=C$)[^312]. Dies minimiert Differenzen zwischen den Plattformen.
 1. CRAN Rechner können sich anders verhalten als lokale \textsf{R} Installationen. Beispielsweise können Laufzeiten stark variieren, da CRAN Maschinen stark ausgelastet sind. Auch Parallelisierungen können eventuell nicht funktionieren, da auf CRAN verschiedene Prozesse parallelisiert werden und dadurch für das Testing eines Packages möglicherweise nur ein Kern zur Verfügung steht. Auch die numerische Präzision kann zwischen verschiedenen Plattformen variieren. Daher sollte eher `expect_equal()` statt `expect_identical()` verwendet werden.
 
 [^212]: CRAN, The Comprehensive R Archive Network, ist die wichtigste Plattform für \textsf{R} Code. https://cran.r-project.org/
+
+[^312]: In Linux Systemen wird mit $LC\_COLLATE=C$ spezifiziert, dass die Sortierung von Strings Grossbuchstaben vor Kleinbuchstaben setzt. 
 
 ## `testthat` in Skripts nutzen {#testthat_in_skripts}  
 
